@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/produk"
+            android:icon="@drawable/basket"
+            android:title="Produk" />
+        <item
+            android:id="@+id/riwayat"
+            android:icon="@drawable/history"
+            android:title="Riwayat" />
+        <item
+            android:id="@+id/reward"
+            android:icon="@drawable/star"
+            android:title="Reward" />
+
+    </group>
+
+    <item android:title="">
+        <menu>
+
+            <item
+                android:id="@+id/logout"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>

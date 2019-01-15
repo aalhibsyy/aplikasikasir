@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:gravity="center">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        app:cardElevation="4dp"
+        card_view:cardBackgroundColor="@color/putihTrans"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:gravity="center"
+                >
+
+                <ImageView
+                    android:id="@+id/gambarproduk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/abu"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:background="@color/putih">
+
+                <TextView
+                    android:id="@+id/namaproduk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:text="Nama Produk"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/hitam"
+                    android:layout_marginTop="5dp"
+                    />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                >
+
+                <Button
+                    android:id="@+id/tambah"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/btnhijau"
+                    android:text="tambah"
+                    android:textColor="@color/putih"
+                    android:visibility="visible"/>
+
+                <LinearLayout
+                    android:id="@+id/ditambah"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:visibility="invisible"
+                    >
+
+                    <ImageView
+                        android:id="@+id/kurangitem"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:background="@drawable/kurang"/>
+
+                    <TextView
+                        android:id="@+id/jumlah"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/hitam"
+                        android:text="1"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:textSize="20dp"
+                        android:textStyle="bold"/>
+
+                    <ImageView
+                        android:id="@+id/tambahitem"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/tambah"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>
