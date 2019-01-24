@@ -49,7 +49,7 @@ public class TabPemesanan extends Fragment {
     List<BeliClassData> databeli = new ArrayList<>();
 
     String[] pembeli = {"Umum", "Gojek", "Grab"};
-    Integer pilihpembeli;
+    Integer pilihpembeli = 0;
     String getpembeli, getuser;
 
 

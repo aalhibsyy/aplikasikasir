@@ -57,7 +57,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class Admin extends AppCompatActivity
+public class  Admin extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Fragment fragment;
@@ -140,29 +140,8 @@ public class Admin extends AppCompatActivity
         }
 
         this.doubleBackToExitPressedOnce = true;
+        finishAffinity();
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Apakah anda ingin keluar");
-        alertDialogBuilder.setPositiveButton("Ya",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-
-                        finishAffinity();
-
-                    }
-                });
-
-        alertDialogBuilder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
 
     }
 

@@ -16,6 +16,10 @@
             android:id="@+id/reward"
             android:icon="@drawable/star"
             android:title="Reward" />
+        <item
+            android:id="@+id/profil"
+            android:icon="@drawable/user"
+            android:title="Profil" />
 
     </group>
 

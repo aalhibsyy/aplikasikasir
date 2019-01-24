@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.himorfosis.kasirmegono.Database;
 import com.himorfosis.kasirmegono.Kasir.BeliClassData;
+import com.himorfosis.kasirmegono.Kasir.Profil;
 import com.himorfosis.kasirmegono.Pemesanan.TabPemesanan;
 import com.himorfosis.kasirmegono.Login;
 import com.himorfosis.kasirmegono.R;
@@ -107,28 +108,7 @@ public class Mitra extends AppCompatActivity
 
         this.doubleBackToExitPressedOnce = true;
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Apakah anda ingin keluar");
-        alertDialogBuilder.setPositiveButton("Ya",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-
-                        finishAffinity();
-
-                    }
-                });
-
-        alertDialogBuilder.setNegativeButton("Tidak",new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        finishAffinity();
 
 
     }
@@ -176,6 +156,11 @@ public class Mitra extends AppCompatActivity
 
             case R.id.reward:
                 fragment = new Reward();
+
+                break;
+
+            case R.id.profil:
+                fragment = new Profil();
 
                 break;
 

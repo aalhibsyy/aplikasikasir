@@ -92,7 +92,6 @@ public class LaporanSemua extends Fragment {
                                 item.setId_pemesanan(jsonObject.getInt("id_pemesanan"));
                                 item.setId_produk(jsonObject.getInt("id_produk"));
                                 item.setId_kasir(jsonObject.getInt("id_kasir"));
-                                item.setNama_kasir(jsonObject.getString("nama_kasir"));
                                 item.setBayar(jsonObject.getInt("bayar"));
                                 item.setNama_produk(jsonObject.getString("nama_produk"));
                                 item.setWaktu(jsonObject.getString("waktu"));

@@ -37,7 +37,7 @@ public class Reward extends Fragment {
     ProgressBar progressBar;
     FrameLayout frame;
     LinearLayout linear;
-    TextView rewardkosong;
+    TextView rewardkosong, point;
     ImageView gambar;
 
     String id_mitra;
@@ -61,6 +61,7 @@ public class Reward extends Fragment {
         linear = view.findViewById(R.id.linear);
         rewardkosong = view.findViewById(R.id.rewardkosong);
         gambar = view.findViewById(R.id.gambar);
+        point = view.findViewById(R.id.point);
 
         id_mitra = Sumber.getData("akun", "id", getContext());
 
@@ -78,10 +79,13 @@ public class Reward extends Fragment {
                         // Showing json data in log monitor
 
                         progressBar.setVisibility(View.GONE);
+//                        linear.setVisibility(View.VISIBLE);
 
                         try {
 
                             JSONArray jsonArray = response.getJSONArray("reward");
+
+                            int kosong = 0;
 
                             //now looping through all the elements of the json array
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -91,7 +95,6 @@ public class Reward extends Fragment {
                                 //creating a hero object and giving them the values from json object
                                 RewardClassData item = new RewardClassData();
 
-
                                 item.setId_reward(jsonObject.getInt("id_reward"));
                                 item.setId_mitra(jsonObject.getInt("id_mitra"));
                                 item.setJumlah_poin(jsonObject.getString("jumlah_poin"));
@@ -99,11 +102,20 @@ public class Reward extends Fragment {
 
                                 Integer poin = Integer.valueOf(item.getJumlah_poin());
 
+                                Log.e("poin", "" + poin);
+                                Log.e("idmitra", "" + id_mitra);
+                                Log.e("idmitra", "" + item.getId_mitra());
+
                                 if (id_mitra.equals(String.valueOf(item.getId_mitra()))) {
+
+                                    Log.e("poin", "" + poin);
 
                                     if (poin > 100) {
 
+                                        kosong = 1;
+
                                         linear.setVisibility(View.VISIBLE);
+                                        point.setText("Total : " + item.getJumlah_poin() + " Point");
 
                                     } else {
 
@@ -112,6 +124,13 @@ public class Reward extends Fragment {
                                     }
 
                                 }
+
+                            }
+
+                            if (kosong == 0) {
+
+                                rewardkosong.setVisibility(View.VISIBLE);
+
 
                             }
 
