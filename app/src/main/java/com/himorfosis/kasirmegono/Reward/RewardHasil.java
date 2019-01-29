@@ -30,7 +30,9 @@ public class RewardHasil extends AppCompatActivity {
     TextView poin, hadiah;
     Button selesai;
 
-    String getkode, iduser, id_reward, jumlahpoin;
+    String getkode, iduser, id_reward, strjumlahpoin;
+
+    Integer jumlahpoin;
 
 
     @Override
@@ -51,9 +53,9 @@ public class RewardHasil extends AppCompatActivity {
         Log.e("id", "" +iduser);
         Log.e("kode", "" +getkode);
 
-        if (getkode.equals("ambilreward")) {
+        if (getkode != null) {
 
-            getReward();
+            cekReward();
 
         } else {
 
@@ -74,7 +76,7 @@ public class RewardHasil extends AppCompatActivity {
 
     }
 
-    private void getReward() {
+    private void cekReward() {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Koneksi.reward_cek,
                 new Response.Listener<String>() {
@@ -100,6 +102,10 @@ public class RewardHasil extends AppCompatActivity {
                                 hadiah.setText(gethadiah);
                                 poin.setText(getpoin);
 
+                                Integer intpoin = Integer.valueOf(getpoin);
+
+                                jumlahpoin = intpoin - 100;
+
                                 updateReward();
 
                             } else {
@@ -108,14 +114,14 @@ public class RewardHasil extends AppCompatActivity {
 
                             }
 
-                            Sumber.toastShow(getApplicationContext(), "Login Sukses");
+                            Sumber.toastShow(getApplicationContext(), "Cek Reward Sukses");
 
                         } catch (JSONException e) {
                             e.printStackTrace();
 
                             Log.e("error", "" +e );
 
-                            Sumber.toastShow(getApplicationContext(), "Login Gagal");
+                            Sumber.toastShow(getApplicationContext(), "Cek Reward  Gagal");
 
                         }
 
@@ -129,16 +135,16 @@ public class RewardHasil extends AppCompatActivity {
 
                         Log.e("error", "" + error);
 
-
                     }
                 }) {
+
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 //Adding parameters to request
 
                 // mengirim data json ke server
-                params.put("id_mitra", iduser);
+                params.put("id_mitra", getkode);
 
                 //returning parameter
                 return params;
@@ -174,14 +180,14 @@ public class RewardHasil extends AppCompatActivity {
 
                             }
 
-                            Sumber.toastShow(getApplicationContext(), "Login Sukses");
+//                            Sumber.toastShow(getApplicationContext(), "Login Sukses");
 
                         } catch (JSONException e) {
                             e.printStackTrace();
 
                             Log.e("error", "" +e );
 
-                            Sumber.toastShow(getApplicationContext(), "Login Gagal");
+                            Sumber.toastShow(getApplicationContext(), "Update Gagal");
 
                         }
 
@@ -206,7 +212,7 @@ public class RewardHasil extends AppCompatActivity {
                 // mengirim data json ke server
                 params.put("id_mitra", iduser);
                 params.put("id_reward", id_reward);
-                params.put("jumlah_poin", "0");
+                params.put("jumlah_poin", String.valueOf(jumlahpoin));
 
                 //returning parameter
                 return params;

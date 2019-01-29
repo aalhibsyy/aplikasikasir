@@ -1,6 +1,7 @@
 package com.himorfosis.kasirmegono.Mitra;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -19,6 +20,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.util.Util;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.himorfosis.kasirmegono.Koneksi;
 import com.himorfosis.kasirmegono.Penjualan.PenjualanAdapter;
 import com.himorfosis.kasirmegono.Penjualan.PenjualanClassData;
@@ -27,6 +32,7 @@ import com.himorfosis.kasirmegono.R;
 import com.himorfosis.kasirmegono.Reward.RewardClassData;
 import com.himorfosis.kasirmegono.Sumber;
 import com.himorfosis.kasirmegono.Volley;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -117,6 +123,21 @@ public class Reward extends Fragment {
                                         linear.setVisibility(View.VISIBLE);
                                         point.setText("Total : " + item.getJumlah_poin() + " Point");
 
+//                                        String codepoin = item.getJumlah_poin(); // Whatever you need to encode in the QR code
+
+                                        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+                                        try {
+                                            BitMatrix bitMatrix = multiFormatWriter.encode(id_mitra, BarcodeFormat.QR_CODE,200,200);
+                                            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                                            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+
+                                            gambar.setImageBitmap(bitmap);
+
+                                        } catch (WriterException e) {
+                                            e.printStackTrace();
+                                        }
+
+
                                     } else {
 
                                         rewardkosong.setVisibility(View.VISIBLE);
@@ -161,6 +182,23 @@ public class Reward extends Fragment {
         //adding the string request to request queue
         Volley.getInstance().addToRequestQueue(jsonObjectRequest);
 
+
+    }
+
+    private void CodeGenerator() {
+
+        String text="" ; // Whatever you need to encode in the QR code
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+        try {
+            BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE,200,200);
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+
+            gambar.setImageBitmap(bitmap);
+
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
 
     }
 
