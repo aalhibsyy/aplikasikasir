@@ -9,8 +9,10 @@ public class BeliClassData {
     private Integer harga_grab;
     private Integer bayar;
     private String nama_produk;
+    private String gambar;
 
-    public BeliClassData (Integer id_produk, Integer jumlah_produk, Integer harga_produk, Integer harga_gojek, Integer harga_grab, Integer bayar, String nama_produk) {
+    public BeliClassData (Integer id_produk, Integer jumlah_produk, Integer harga_produk,
+                          Integer harga_gojek, Integer harga_grab, Integer bayar, String nama_produk, String gambar) {
 
         super();
         this.id_produk = id_produk;
@@ -20,6 +22,7 @@ public class BeliClassData {
         this.harga_grab = harga_grab;
         this.bayar = bayar;
         this.nama_produk = nama_produk;
+        this.gambar = gambar;
 
     }
 
@@ -77,5 +80,13 @@ public class BeliClassData {
 
     public void setHarga_grab(Integer harga_grab) {
         this.harga_grab = harga_grab;
+    }
+
+    public String getGambar() {
+        return gambar;
+    }
+
+    public void setGambar(String gambar) {
+        this.gambar = gambar;
     }
 }

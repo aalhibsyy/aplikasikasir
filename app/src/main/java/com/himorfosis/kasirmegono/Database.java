@@ -20,9 +20,10 @@ public class Database extends SQLiteOpenHelper {
     private static final String harga_grab = "harga_grab";
     private static final String bayar = "bayar";
     private static final String nama_produk = "nama_produk";
+    private static final String gambar = "gambar";
 
     private static final String DatabaseName = "Kasir";
-    private static final int DatabaseVersion = 1;
+    private static final int DatabaseVersion = 2;
 
     public Database(Context context) {
         super(context, DatabaseName, null, DatabaseVersion);
@@ -32,7 +33,7 @@ public class Database extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("CREATE TABLE tabelbeli ( id_produk INTEGER, jumlah_produk INTEGER, harga_produk INTEGER, harga_gojek INTEGER, harga_grab INTEGER, bayar INTEGER, nama_produk VARCHAR ); ");
+        db.execSQL("CREATE TABLE tabelbeli ( id_produk INTEGER, jumlah_produk INTEGER, harga_produk INTEGER, harga_gojek INTEGER, harga_grab INTEGER, bayar INTEGER, nama_produk VARCHAR, gambar VARCHAR ); ");
 
     }
 
@@ -57,6 +58,7 @@ public class Database extends SQLiteOpenHelper {
         cv.put(harga_grab, classData.getHarga_grab());
         cv.put(bayar, classData.getBayar());
         cv.put(nama_produk, classData.getNama_produk());
+        cv.put(gambar, classData.getGambar());
 
         db.insert("tabelbeli", null, cv);
         db.close();
@@ -84,6 +86,7 @@ public class Database extends SQLiteOpenHelper {
         cv.put(harga_grab, classData.getHarga_grab());
         cv.put(bayar, classData.getBayar());
         cv.put(nama_produk, classData.getNama_produk());
+        cv.put(gambar, classData.getGambar());
 
         db.update("tabelbeli", cv, id_produk+ " = ?", new String[]{String.valueOf(classData.getId_produk())});
         db.close();
@@ -98,7 +101,7 @@ public class Database extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
 
-                BeliClassData datalist = new BeliClassData(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4) , cursor.getInt(5), cursor.getString(6));
+                BeliClassData datalist = new BeliClassData(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4) , cursor.getInt(5), cursor.getString(6), cursor.getString(7));
 
                 dataArray.add(datalist);
 

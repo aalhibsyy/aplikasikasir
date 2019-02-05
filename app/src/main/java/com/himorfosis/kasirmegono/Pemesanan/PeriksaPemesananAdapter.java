@@ -119,7 +119,7 @@ public class PeriksaPemesananAdapter extends BaseAdapter {
 
                             holder.jumlah.setText(totalpesan);
 
-                            db.updateBeli(new BeliClassData(produk.getId_produk(), tambahpesanan, produk.getHarga_produk(), produk.getHarga_gojek(), produk.getHarga_grab(), produk.getHarga_produk(), produk.getNama_produk()));
+                            db.updateBeli(new BeliClassData(produk.getId_produk(), tambahpesanan, produk.getHarga_produk(), produk.getHarga_gojek(), produk.getHarga_grab(), produk.getHarga_produk(), produk.getNama_produk(), produk.getGambar()));
 
                             Log.e("tambah id", "" + produk.getId_produk());
 
@@ -138,6 +138,8 @@ public class PeriksaPemesananAdapter extends BaseAdapter {
             holder.kurangitem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    jumlahitem = db.getBeli();
 
                     for (int i = 0; i < jumlahitem.size(); i++) {
 
@@ -160,7 +162,7 @@ public class PeriksaPemesananAdapter extends BaseAdapter {
 
                             } else {
 
-                                db.updateBeli(new BeliClassData(produk.getId_produk(), kurangpesanan, produk.getHarga_produk(), produk.getHarga_gojek(), produk.getHarga_grab(), produk.getHarga_produk(), produk.getNama_produk()));
+                                db.updateBeli(new BeliClassData(produk.getId_produk(), kurangpesanan, produk.getHarga_produk(), produk.getHarga_gojek(), produk.getHarga_grab(), produk.getHarga_produk(), produk.getNama_produk(), produk.getGambar()));
 
                                 // reload new data
 

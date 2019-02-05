@@ -2,7 +2,7 @@ package com.himorfosis.kasirmegono;
 
 public class Koneksi {
 
-    public static final String URL = "http://192.168.137.1/";
+    public static final String URL = "http://192.168.100.222/";
 
     public static final String login = URL + "kasir/api/login.php";
 

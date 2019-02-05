@@ -22,6 +22,7 @@ public class Pembayaran extends AppCompatActivity {
     EditText jumlahlain;
 
     int jumlahbayar = 0;
+    int cekpembayaran = 0;
     String tagihan;
 
     @Override
@@ -52,14 +53,18 @@ public class Pembayaran extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                jumlahbayar = 0;
+                if (cekpembayaran == 1) {
 
-                seratus.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
-                dua.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
-                lima.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
+                    cekpembayaran = 0;
+                    cekPembayaran(cekpembayaran);
+                    cekAktif(cekpembayaran);
 
-                uangpas.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhijau));
-                jumlahbayar = Integer.valueOf(tagihan);
+                } else {
+
+                    cekpembayaran = 1;
+                    cekPembayaran(cekpembayaran);
+                    cekAktif(cekpembayaran);
+                }
 
             }
         });
@@ -68,14 +73,18 @@ public class Pembayaran extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                jumlahbayar = 0;
+                if (cekpembayaran == 20) {
 
-                seratus.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
-                uangpas.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
-                lima.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
+                    cekpembayaran = 0;
+                    cekPembayaran(cekpembayaran);
+                    cekAktif(cekpembayaran);
 
-                dua.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhijau));
-                jumlahbayar = 20000;
+                } else {
+
+                    cekpembayaran = 20;
+                    cekPembayaran(cekpembayaran);
+                    cekAktif(cekpembayaran);
+                }
 
             }
         });
@@ -84,14 +93,19 @@ public class Pembayaran extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                jumlahbayar = 0;
+                if (cekpembayaran == 50) {
 
-                seratus.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
-                uangpas.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
-                dua.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
+                    cekpembayaran = 0;
+                    cekPembayaran(cekpembayaran);
+                    cekAktif(cekpembayaran);
 
-                lima.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhijau));
-                jumlahbayar = 50000;
+                } else {
+
+                    cekpembayaran = 50;
+                    cekPembayaran(cekpembayaran);
+                    cekAktif(cekpembayaran);
+
+                }
 
             }
         });
@@ -100,14 +114,19 @@ public class Pembayaran extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                jumlahbayar = 0;
+                if (cekpembayaran == 100) {
 
-                lima.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
-                uangpas.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
-                dua.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
+                    cekpembayaran = 0;
+                    cekPembayaran(cekpembayaran);
+                    cekAktif(cekpembayaran);
 
-                seratus.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhijau));
-                jumlahbayar = 100000;
+                } else {
+
+                    cekpembayaran = 100;
+                    cekPembayaran(cekpembayaran);
+                    cekAktif(cekpembayaran);
+
+                }
 
             }
         });
@@ -130,12 +149,15 @@ public class Pembayaran extends AppCompatActivity {
 
                         // edit text
 
-                        inttagihan = Integer.valueOf(inputmanual);
+                        int jumlahlain = Integer.valueOf(inputmanual);
 
-                        if (jumlahbayar >= inttagihan) {
+                        Log.e("pembayaran", "jumlah : " +jumlahbayar);
+                        Log.e("pembayaran", "tagihan : " +inttagihan);
+
+                        if (jumlahlain >= inttagihan) {
 
                             Intent in = new Intent(Pembayaran.this, KembalianBayaran.class);
-                            in.putExtra("bayar", jumlahlain.getText().toString());
+                            in.putExtra("bayar", String.valueOf(jumlahlain));
                             startActivity(in);
 
                         } else {
@@ -182,6 +204,60 @@ public class Pembayaran extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void cekPembayaran(Integer pembayaran) {
+
+        if (pembayaran == 1) {
+
+            jumlahbayar = Integer.valueOf(tagihan);
+
+        } else if (pembayaran == 20) {
+
+            jumlahbayar = 20000;
+
+        } else if (pembayaran == 50) {
+
+            jumlahbayar = 50000;
+
+
+        } else if (pembayaran == 100) {
+
+            jumlahbayar = 100000;
+
+        } else {
+
+            jumlahbayar = 0;
+
+        }
 
     }
+
+    private void cekAktif(Integer aktif) {
+
+        seratus.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
+        dua.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
+        lima.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
+        uangpas.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhitam));
+
+        if (aktif == 1) {
+
+            uangpas.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhijau));
+
+        } else if (aktif == 20) {
+
+            dua.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhijau));
+
+        } else if (aktif == 50) {
+
+            lima.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhijau));
+
+        } else if (aktif == 100) {
+
+            seratus.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btnhijau));
+
+        }
+
+    }
+
 }

@@ -127,7 +127,7 @@ public class Reward extends Fragment {
 
                                         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
                                         try {
-                                            BitMatrix bitMatrix = multiFormatWriter.encode(id_mitra, BarcodeFormat.QR_CODE,200,200);
+                                            BitMatrix bitMatrix = multiFormatWriter.encode(item.getJumlah_poin(), BarcodeFormat.QR_CODE,200,200);
                                             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                                             Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
 
@@ -136,12 +136,6 @@ public class Reward extends Fragment {
                                         } catch (WriterException e) {
                                             e.printStackTrace();
                                         }
-
-
-                                    } else {
-
-                                        rewardkosong.setVisibility(View.VISIBLE);
-
                                     }
 
                                 }
@@ -151,7 +145,6 @@ public class Reward extends Fragment {
                             if (kosong == 0) {
 
                                 rewardkosong.setVisibility(View.VISIBLE);
-
 
                             }
 

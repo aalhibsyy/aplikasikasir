@@ -1,5 +1,6 @@
 package com.himorfosis.kasirmegono.Pemesanan;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.himorfosis.kasirmegono.Kasir.Kasir;
 import com.himorfosis.kasirmegono.R;
 
 public class Periksa extends AppCompatActivity {
@@ -30,7 +32,6 @@ public class Periksa extends AppCompatActivity {
         Button back = (Button)getSupportActionBar().getCustomView().findViewById(R.id.kembali);
         back.setVisibility(View.VISIBLE);
 
-
         if (fragment == null) {
             fragment = new PeriksaPemesanan();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -38,6 +39,14 @@ public class Periksa extends AppCompatActivity {
             ft.commit();
 
         }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent in = new Intent(getApplicationContext(), Kasir.class);
+        startActivity(in);
 
     }
 

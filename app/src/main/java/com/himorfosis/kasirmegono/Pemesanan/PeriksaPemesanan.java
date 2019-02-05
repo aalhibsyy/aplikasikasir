@@ -66,6 +66,56 @@ public class PeriksaPemesanan extends Fragment {
         bayar = view.findViewById(R.id.bayar);
         list = view.findViewById(R.id.list);
 
+        // get data pemesanan from database
+
+        getPemesanan();
+
+        // show total pemesanan and total bayar
+
+        totalbayar.setText(String.valueOf("Rp " + bayartotal));
+        totalitem.setText("Total " + String.valueOf(itemtotal) + " pesanan");
+
+        // button tambah item
+
+        tambahitem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent in = new Intent(getContext(), TambahPemesanan.class);
+                startActivity(in);
+
+            }
+        });
+
+        bayar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent in = new Intent(getContext(), Pembayaran.class);
+                startActivity(in);
+
+                Sumber.saveData("tagihan", "data", String.valueOf(bayartotal), getContext());
+                Sumber.saveData("tagihan", "total", String.valueOf(itemtotal), getContext());
+
+            }
+        });
+
+
+
+        kembali.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent in = new Intent(getContext(), Kasir.class);
+                startActivity(in);
+
+            }
+        });
+
+    }
+
+    private void getPemesanan() {
+
         datapesanan = db.getBeli();
 
         for (int i = 0; i < datapesanan.size(); i++ ) {
@@ -113,44 +163,9 @@ public class PeriksaPemesanan extends Fragment {
 
         }
 
-        totalbayar.setText(String.valueOf("Rp " + bayartotal));
-
-        totalitem.setText("Total " + String.valueOf(itemtotal) + " pesanan");
-
         adapter = new PeriksaPemesananAdapter(getContext(), datapesanan, getFragmentManager());
         list.setAdapter(adapter);
 
-        bayar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent in = new Intent(getContext(), Pembayaran.class);
-                startActivity(in);
-
-                Sumber.saveData("tagihan", "data", String.valueOf(bayartotal), getContext());
-                Sumber.saveData("tagihan", "total", String.valueOf(itemtotal), getContext());
-
-            }
-        });
-
-        tambahitem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Sumber.toastShow(getContext(), "tambah item");
-
-            }
-        });
-
-        kembali.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent in = new Intent(getContext(), Kasir.class);
-                startActivity(in);
-
-            }
-        });
-
     }
+
 }

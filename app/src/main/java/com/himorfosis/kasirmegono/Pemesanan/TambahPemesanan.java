@@ -2,13 +2,12 @@ package com.himorfosis.kasirmegono.Pemesanan;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ProgressBar;
@@ -36,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class TabPemesanan extends Fragment {
+public class TambahPemesanan extends AppCompatActivity {
 
     GridView gridView;
     Button checkout;
@@ -48,149 +47,51 @@ public class TabPemesanan extends Fragment {
     Database db;
     List<BeliClassData> databeli = new ArrayList<>();
 
-    String[] pembeli = {"Umum", "Gojek", "Grab"};
-    Integer pilihpembeli = 0;
-    String getpembeli, getuser;
-
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.tambah_pemesanan);
 
-        //Returning the layout file after inflating
-        //Change R.layout.tab1 in you classes
-        return inflater.inflate(R.layout.tabpemesanan, container, false);
+        // toolbar
 
-    }
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.toolbarclose);
 
-    public void onViewCreated(final View view, Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-        super.onViewCreated(view, savedInstanceState);
+        TextView judul = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.toolbartext);
+        judul.setText("Tambah Pesanan");
 
-        db = new Database(getContext());
+        Button back = (Button)getSupportActionBar().getCustomView().findViewById(R.id.kembali);
+        back.setVisibility(View.VISIBLE);
 
-        gridView = view.findViewById(R.id.gridview);
-        checkout = view.findViewById(R.id.checkout);
-        kosong = view.findViewById(R.id.kosong);
-        progressBar = view.findViewById(R.id.progress);
+        db = new Database(TambahPemesanan.this);
 
-        Sumber.deleteDataInt("pesanan", getContext());
-        getuser = Sumber.getData("akun", "user", getContext());
-
-        Log.e("get user", "" +getuser);
-
-        if (getuser.equals("Kasir")) {
-
-            getActivity().setTitle("Pemesanan");
-
-        } else {
-
-            getActivity().setTitle("Produk");
-
-        }
-
-        Calendar cal = Calendar.getInstance();
-
-        DateFormat date = new SimpleDateFormat("yyyy-MM-dd, kk:mm");
-
-        String datetime = date.format(cal.getTime());
-
-
-        Log.e("date time", "" + datetime);
+        gridView = findViewById(R.id.gridview);
+        checkout = findViewById(R.id.checkout);
+        kosong = findViewById(R.id.kosong);
+        progressBar = findViewById(R.id.progress);
 
         getproduk();
-
 
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (getuser.equals("Kasir")) {
-
-                    cekpembeli();
-
-                } else {
-
-                    getpembeli = "Umum";
-
-                    Log.e("pembeli", "" +getpembeli);
-
-                    Sumber.saveData("pemesanan", "pembeli", getpembeli, getContext());
-
-                    databeli = db.getBeli();
-
-                    Log.e("database", "" +databeli);
-
-                    if (databeli.isEmpty()) {
-
-                        Sumber.toastShow(getContext(), "Harap pilih produk");
-
-                    } else {
-
-                        Intent in = new Intent(getContext(), Periksa.class);
-                        startActivity(in);
-
-                    }
-
-                }
+                Intent in = new Intent(getApplicationContext(), Periksa.class);
+                startActivity(in);
 
             }
         });
 
-    }
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-    private void cekpembeli() {
+                Intent in = new Intent(getApplicationContext(), Periksa.class);
+                startActivity(in);
 
-        AlertDialog dialog = new AlertDialog.Builder(getContext())
-
-                .setTitle("Pilih pelanggan :")
-                .setSingleChoiceItems(pembeli, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        pilihpembeli = which;
-
-                    }
-                })
-
-                .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        dialog.dismiss();
-
-                    }
-                })
-
-                .setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        getpembeli = pembeli[pilihpembeli];
-
-                        Log.e("pembeli", "" +getpembeli);
-
-                        Sumber.saveData("pemesanan", "pembeli", getpembeli, getContext());
-
-                        databeli = db.getBeli();
-
-                        Log.e("database", "" +databeli);
-
-                        if (databeli.isEmpty()) {
-
-                            Sumber.toastShow(getContext(), "Harap pilih produk");
-
-                        } else {
-
-                            Intent in = new Intent(getContext(), Periksa.class);
-                            startActivity(in);
-
-                        }
-
-                    }
-                })
-
-                .create();
-        dialog.show();
+            }
+        });
 
     }
 
@@ -249,7 +150,7 @@ public class TabPemesanan extends Fragment {
 
                             }
 
-                            adapter = new PemesananAdapter(getContext(), listproduk, getFragmentManager());
+                            adapter = new PemesananAdapter(getApplicationContext(), listproduk, getSupportFragmentManager());
                             gridView.setAdapter(adapter);
 
                             // get data and play doa from array datadoa
@@ -292,5 +193,48 @@ public class TabPemesanan extends Fragment {
         Volley.getInstance().addToRequestQueue(jsonObjectRequest);
 
     }
+
+//    private void getproduk() {
+//
+//        databeli = db.getBeli();
+//
+//        for (int i = 0; i < databeli.size(); i++) {
+//
+//            ProdukClassData item = new ProdukClassData();
+//
+//            BeliClassData data = databeli.get(i);
+//
+//            item.setId_produk(data.getId_produk());
+////            item.setKategori(jsonObject.getString("kategori"));
+//            item.setNama_produk(data.getNama_produk());
+//            item.setGambar(data.getGambar());
+//            item.setHarga(data.getHarga_produk());
+//            item.setHarga_gojek(data.getHarga_gojek());
+//            item.setHarga_grab(data.getHarga_grab());
+//
+//            listproduk.add(item);
+//
+//        }
+//
+//        Log.e("list produk", ""+listproduk);
+//
+//        progressBar.setVisibility(View.GONE);
+//        checkout.setVisibility(View.VISIBLE);
+//
+//        if (listproduk.isEmpty()) {
+//
+//            kosong.setVisibility(View.VISIBLE);
+//            kosong.setText("Produk kosong");
+//
+//        } else {
+//
+//            gridView.setVisibility(View.VISIBLE);
+//
+//            adapter = new PemesananAdapter(getApplicationContext(), listproduk, getSupportFragmentManager());
+//            gridView.setAdapter(adapter);
+//
+//        }
+//
+//    }
 
 }

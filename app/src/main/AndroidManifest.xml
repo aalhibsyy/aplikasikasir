@@ -98,7 +98,10 @@
             android:name=".Penjualan.PenjualanDetail"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Reward.RewardHasil"></activity>
+        <activity android:name=".Reward.RewardHasil" />
+        <activity android:name=".Pemesanan.TambahPemesanan"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

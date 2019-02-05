@@ -34,6 +34,7 @@ public class PemesananAdapter extends BaseAdapter {
     ArrayList<ProdukClassData> arraylist;
     Database db;
     List<BeliClassData> beliproduk = new ArrayList<>();
+    List<BeliClassData> cekproduk = new ArrayList<>();
 
     public PemesananAdapter(Context context, List<ProdukClassData> objects, FragmentManager fragmentManager) {
 
@@ -55,7 +56,7 @@ public class PemesananAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return list.size();
+        return this.list.size();
     }
 
     @Override
@@ -70,13 +71,15 @@ public class PemesananAdapter extends BaseAdapter {
 
     @SuppressLint("StaticFieldLeak")
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
 
         final ViewHolder holder;
 
         db = new Database(context);
 
         final ProdukClassData produk = (ProdukClassData) getItem(position);
+
+//        Log.e("pemesanan adapter", "" + position);
 
         if (convertView == null) {
 
@@ -100,12 +103,16 @@ public class PemesananAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
 
-                    db.addBeli(new BeliClassData(produk.getId_produk(), 1, produk.getHarga(), produk.getHarga_gojek(), produk.getHarga_grab(), produk.getHarga(), produk.getNama_produk() ));
+                    db.addBeli(new BeliClassData(produk.getId_produk(), 1, produk.getHarga(), produk.getHarga_gojek(), produk.getHarga_grab(), produk.getHarga(), produk.getNama_produk(), produk.getGambar()));
 
                     holder.tambah.setVisibility(View.INVISIBLE);
                     holder.ditambah.setVisibility(View.VISIBLE);
 
-                    Log.e("klik id", "" +produk.getId_produk());
+                    Log.e("klik id", "" + produk.getId_produk());
+
+                    holder.jumlah.setText("1");
+
+                    beliproduk = db.getBeli();
 
                 }
             });
@@ -117,30 +124,31 @@ public class PemesananAdapter extends BaseAdapter {
 
                     beliproduk = db.getBeli();
 
-                    Log.e("id", "" +produk.getId_produk());
-
                     for (int i = 0; i < beliproduk.size(); i++) {
 
                         BeliClassData data = beliproduk.get(i);
-
-                        Log.e("id tersimpan", "" +data.getId_produk());
 
                         int idklik = data.getId_produk();
                         int idsimpan = produk.getId_produk();
 
                         if (idklik == idsimpan) {
 
+                            Log.e("id", "" + idklik);
+                            Log.e("id", "" + idsimpan);
+
+                            Log.e("tambah pesanan", "" + data.getJumlah_produk());
+
+//                            int jumlahbarang = Integer.valueOf(data.getJumlah_produk());
+
                             int jumlahpesanan = data.getJumlah_produk() + 1;
 
-                            String totalpesan = String.valueOf(jumlahpesanan);
+                            Log.e("tambah pesanan", "" + jumlahpesanan);
 
-                            Log.e("totalpesan", "" +totalpesan);
+                            holder.jumlah.setText(String.valueOf(jumlahpesanan));
 
-                            holder.jumlah.setText(totalpesan);
+                            db.updateBeli(new BeliClassData(produk.getId_produk(), jumlahpesanan, produk.getHarga(), produk.getHarga_gojek(), produk.getHarga_grab(), produk.getHarga(), produk.getNama_produk(), produk.getGambar()));
 
-                            db.updateBeli(new BeliClassData(produk.getId_produk(), jumlahpesanan, produk.getHarga(),  produk.getHarga_gojek(), produk.getHarga_grab(), produk.getHarga(), produk.getNama_produk() ));
-
-                            Log.e("tambah id", "" +produk.getId_produk());
+                            Log.e("tambah id", "" + produk.getId_produk());
 
                         }
 
@@ -153,6 +161,8 @@ public class PemesananAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
 
+                    beliproduk = db.getBeli();
+
                     for (int i = 0; i < beliproduk.size(); i++) {
 
                         BeliClassData data = beliproduk.get(i);
@@ -162,21 +172,29 @@ public class PemesananAdapter extends BaseAdapter {
 
                         if (idklik == idsimpan) {
 
-                            int jumlahpesanan = data.getJumlah_produk() - 1;
+                            Log.e("id", "" + idklik);
+                            Log.e("id", "" + idsimpan);
 
-                            String totalpesan = String.valueOf(jumlahpesanan);
+                            Log.e("kurang pesanan", "" + data.getJumlah_produk());
 
-                            holder.jumlah.setText(totalpesan);
+                            int jumlah = data.getJumlah_produk();
+
+                            int jumlahpesanan = jumlah - 1;
+
+                            Log.e("kurang pesanan", "" + jumlahpesanan);
 
                             if (jumlahpesanan == 0) {
 
                                 db.delBeli(String.valueOf(produk.getId_produk()));
-                                holder.tambah.setVisibility(View.INVISIBLE);
+                                holder.tambah.setVisibility(View.VISIBLE);
+                                holder.ditambah.setVisibility(View.INVISIBLE);
+
 
                             } else {
 
-                                db.updateBeli(new BeliClassData(produk.getId_produk(), jumlahpesanan, produk.getHarga(),  produk.getHarga_gojek(), produk.getHarga_grab(), produk.getHarga(), produk.getNama_produk() ));
+                                holder.jumlah.setText(String.valueOf(jumlahpesanan));
 
+                                db.updateBeli(new BeliClassData(produk.getId_produk(), jumlahpesanan, produk.getHarga(), produk.getHarga_gojek(), produk.getHarga_grab(), produk.getHarga(), produk.getNama_produk(), produk.getGambar()));
 
                             }
 
@@ -188,31 +206,56 @@ public class PemesananAdapter extends BaseAdapter {
             });
 
 
-            if (produk != null) {
+            holder.namaproduk.setText(produk.getNama_produk());
 
-                holder.namaproduk.setText(produk.getNama_produk());
+            String getGambar = produk.getGambar();
 
-                String getGambar = produk.getGambar();
+            if (getGambar != null) {
 
-                if (getGambar != null) {
+                final String urlGambar = Koneksi.gambar + produk.getGambar();
 
-                    final String urlGambar = Koneksi.gambar + produk.getGambar();
+                Log.e("url gambar", "" + urlGambar);
 
-                    Log.e("url gambar", "" + urlGambar);
+                Picasso.with(context).load(urlGambar)
+                        .error(R.drawable.broken_image)
+                        .into(holder.gambar);
 
-                    Picasso.with(context).load(urlGambar).into(holder.gambar);
+            } else {
 
-                } else {
+                holder.gambar.setImageResource(R.drawable.broken_image);
 
-                    holder.gambar.setImageResource(R.drawable.broken_image);
+            }
+
+            // cek data jumalah yang telah dipemesanan
+
+            cekproduk = db.getBeli();
+
+            for (int a = 0; a < cekproduk.size(); a++) {
+
+                BeliClassData data = cekproduk.get(a);
+
+                Log.e("pemesanan", "id : " + data.getId_produk());
+                Log.e("pemesanan", "id : " + produk.getId_produk());
+
+                int id_produk = produk.getId_produk();
+                int id_pemesanan = data.getId_produk();
+
+                if (id_produk == id_pemesanan) {
+
+                    holder.tambah.setVisibility(View.INVISIBLE);
+                    holder.ditambah.setVisibility(View.VISIBLE);
+
+                    Log.e("pemesanan sama", "" + produk.getId_produk());
+
+                    holder.jumlah.setText(String.valueOf(data.getJumlah_produk()));
+
+                    cekproduk = db.getBeli();
 
                 }
 
             }
 
-        } else {
 
-            holder = (ViewHolder) convertView.getTag();
         }
 
         return convertView;
