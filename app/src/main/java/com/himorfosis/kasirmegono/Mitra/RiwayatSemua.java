@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -35,11 +36,15 @@ public class RiwayatSemua extends Fragment {
 
     ListView list;
     ProgressBar progressBar;
-    TextView kosong;
+    TextView kosong, pendapatan;
+    LinearLayout frame;
     List<PenjualanClassData> listpemesanan = new ArrayList<>();
     PenjualanAdapter adapter;
 
     String getid;
+
+    int totalpendapatan = 0;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,6 +63,8 @@ public class RiwayatSemua extends Fragment {
         list = view.findViewById(R.id.list);
         progressBar = view.findViewById(R.id.progress);
         kosong = view.findViewById(R.id.kosong);
+        pendapatan = view.findViewById(R.id.pendapatan);
+        frame = view.findViewById(R.id.frame);
 
         // get id from shared preference
 
@@ -83,7 +90,7 @@ public class RiwayatSemua extends Fragment {
                         int cekData = 0;
 
                         progressBar.setVisibility(View.GONE);
-                        list.setVisibility(View.VISIBLE);
+                        frame.setVisibility(View.VISIBLE);
 
                         try {
 
@@ -111,13 +118,19 @@ public class RiwayatSemua extends Fragment {
 
                                 if(id_kasir.equals(getid)) {
 
+                                    int penjualan = item.getTotal_harga() * item.getJumlah();
+
+                                    totalpendapatan = totalpendapatan + penjualan;
+
                                     listpemesanan.add(item);
 
                                 }
 
                             }
 
-                            Log.e("list produk", "" + listpemesanan);
+                            // set total hasil penjualan
+
+                            pendapatan.setText("Rp " + String.valueOf(totalpendapatan));
 
                             progressBar.setVisibility(View.GONE);
 

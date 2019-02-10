@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -38,11 +39,15 @@ public class TabPenjualan extends Fragment {
 
     ListView list;
     ProgressBar progressBar;
-    TextView kosong;
+    LinearLayout frame;
+    TextView kosong, pendapatan;
     List<PenjualanClassData> listpemesanan = new ArrayList<>();
     PenjualanAdapter adapter;
 
     String datetime, today, getid;
+
+    int totalpendapatan = 0;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,6 +66,8 @@ public class TabPenjualan extends Fragment {
         list = view.findViewById(R.id.list);
         progressBar = view.findViewById(R.id.progress);
         kosong = view.findViewById(R.id.kosong);
+        pendapatan = view.findViewById(R.id.pendapatan);
+        frame = view.findViewById(R.id.frame);
 
         cekHari();
 
@@ -84,7 +91,7 @@ public class TabPenjualan extends Fragment {
                         int cekData = 0;
 
                         progressBar.setVisibility(View.GONE);
-                        list.setVisibility(View.VISIBLE);
+                        frame.setVisibility(View.VISIBLE);
 
                         try {
 
@@ -119,6 +126,10 @@ public class TabPenjualan extends Fragment {
 
                                         if (today.equals(tanggal)) {
 
+                                            int penjualan = item.getTotal_harga() * item.getJumlah();
+
+                                            totalpendapatan = totalpendapatan + penjualan;
+
                                             listpemesanan.add(item);
 
                                         }
@@ -129,7 +140,9 @@ public class TabPenjualan extends Fragment {
 
                             }
 
-                            Log.e("list produk", "" + listpemesanan);
+                            // set total hasil penjualan
+
+                            pendapatan.setText("Rp " + String.valueOf(totalpendapatan));
 
                             progressBar.setVisibility(View.GONE);
 

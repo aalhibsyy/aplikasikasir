@@ -1,4 +1,4 @@
-package com.himorfosis.kasirmegono.Kasir;
+package com.himorfosis.kasirmegono.profil;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.himorfosis.kasirmegono.Admin.KaryawanClassData;
 import com.himorfosis.kasirmegono.Admin.KaryawanDetail;
 import com.himorfosis.kasirmegono.Admin.KaryawanListAdapter;
+import com.himorfosis.kasirmegono.Admin.KaryawanTambah;
 import com.himorfosis.kasirmegono.Admin.MitraClassData;
 import com.himorfosis.kasirmegono.Admin.MitraDetail;
 import com.himorfosis.kasirmegono.Admin.MitraListAdapter;
@@ -35,11 +37,12 @@ public class Profil extends Fragment {
 
     TextView email, user, phone, alamat, nama;
 
-    String getemail, getuser, getid, getphone, getalamat, getdari;
+    String getemail, getuser, getid, getphone, getalamat;
+
+    Button update;
 
     ProgressBar progressBar;
     LinearLayout frame, linalamat, linphone;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,6 +67,7 @@ public class Profil extends Fragment {
         frame = view.findViewById(R.id.frame);
         linalamat = view.findViewById(R.id.linalamat);
         linphone = view.findViewById(R.id.linphone);
+        update = view.findViewById(R.id.update);
 
         getemail = Sumber.getData("akun", "email", getContext());
         getuser = Sumber.getData("akun", "user", getContext());
@@ -80,6 +84,25 @@ public class Profil extends Fragment {
         }
 
         user.setText(getuser);
+
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (getuser.equals("Kasir")) {
+
+                    dataKasir();
+                    Intent in = new Intent(getContext(), KaryawanTambah.class);
+                    startActivity(in);
+
+                } else {
+
+                    dataMitra();
+
+                }
+
+            }
+        });
 
     }
 
@@ -196,7 +219,6 @@ public class Profil extends Fragment {
 
                                     linalamat.setVisibility(View.INVISIBLE);
                                     linphone.setVisibility(View.INVISIBLE);
-
 
                                 }
 

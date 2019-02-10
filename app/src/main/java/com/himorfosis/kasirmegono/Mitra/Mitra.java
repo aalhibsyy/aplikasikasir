@@ -1,11 +1,9 @@
 package com.himorfosis.kasirmegono.Mitra;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -20,7 +18,7 @@ import android.widget.TextView;
 
 import com.himorfosis.kasirmegono.Database;
 import com.himorfosis.kasirmegono.Kasir.BeliClassData;
-import com.himorfosis.kasirmegono.Kasir.Profil;
+import com.himorfosis.kasirmegono.profil.Profil;
 import com.himorfosis.kasirmegono.Pemesanan.TabPemesanan;
 import com.himorfosis.kasirmegono.Login;
 import com.himorfosis.kasirmegono.R;

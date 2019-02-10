@@ -25,7 +25,6 @@
             android:divider="@null"
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
-            android:visibility="visible"
             android:layout_weight="0.8"
 
             />

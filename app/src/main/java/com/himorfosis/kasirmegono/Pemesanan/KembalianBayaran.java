@@ -139,8 +139,6 @@ public class KembalianBayaran extends AppCompatActivity {
 
                     cekRewardMitra();
 
-                    updateRewardMitra();
-
                     dataJson();
 
                     pemesananPost();
@@ -194,6 +192,9 @@ public class KembalianBayaran extends AppCompatActivity {
 
                             }
 
+                            updateRewardMitra();
+
+
                         } catch (JSONException e) {
                             e.printStackTrace();
 
@@ -201,9 +202,9 @@ public class KembalianBayaran extends AppCompatActivity {
 
                             Sumber.toastShow(getApplicationContext(), "Reward Gagal");
 
-                        }
+                            hideDialog();
 
-                        hideDialog();
+                        }
 
                     }
                 },
@@ -270,8 +271,6 @@ public class KembalianBayaran extends AppCompatActivity {
                             Sumber.toastShow(getApplicationContext(), "Reward Gagal");
 
                         }
-
-                        hideDialog();
 
                     }
                 },
@@ -369,7 +368,6 @@ public class KembalianBayaran extends AppCompatActivity {
     }
 
     private void pemesananPost() {
-
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Koneksi.pemesanan_post,
                 new Response.Listener<String>() {
