@@ -103,7 +103,6 @@
             android:name=".Pemesanan.TambahPemesanan"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".profil.ProfilUpdate"></activity>
     </application>
 
 </manifest>

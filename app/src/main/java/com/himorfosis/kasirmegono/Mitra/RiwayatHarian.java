@@ -123,12 +123,9 @@ public class RiwayatHarian extends Fragment {
 
                                     if (today.equals(tanggal)) {
 
-                                        int penjualan = item.getTotal_harga() * item.getJumlah();
+//                                        int penjualan = item.getTotal_harga() * item.getJumlah();
 
-                                        totalpendapatan = totalpendapatan + penjualan;
-
-                                        listpemesanan.add(item);
-
+                                        totalpendapatan = totalpendapatan + item.getTotal_harga();
 
                                         listpemesanan.add(item);
 

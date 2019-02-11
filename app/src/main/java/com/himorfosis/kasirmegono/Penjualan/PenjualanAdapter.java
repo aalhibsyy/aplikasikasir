@@ -55,6 +55,8 @@ public class PenjualanAdapter extends ArrayAdapter<PenjualanClassData> {
             TextView nomor = (TextView) v.findViewById(R.id.nomor);
             TextView waktu = (TextView) v.findViewById(R.id.waktutransaksi);
 
+//            int totalbeli = produk.getTotal_harga() + produk.getJumlah_produk();
+
             total.setText("Rp " + String.valueOf(produk.getTotal_harga()));
             nomor.setText(String.valueOf(getnomor) +".");
             waktu.setText(produk.getWaktu());

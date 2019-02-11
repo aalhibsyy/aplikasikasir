@@ -105,9 +105,9 @@ public class LaporanSemua extends Fragment {
                                 item.setKembalian(jsonObject.getInt("kembalian"));
                                 item.setTotal_harga(jsonObject.getInt("total_harga"));
 
-                                int penjualan = item.getTotal_harga() * item.getJumlah();
+//                                int penjualan = item.getTotal_harga() * item.getJumlah();
 
-                                totalpendapatan = totalpendapatan + penjualan;
+                                totalpendapatan = totalpendapatan + item.getTotal_harga();
 
                                 listpemesanan.add(item);
 

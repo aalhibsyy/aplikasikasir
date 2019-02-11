@@ -17,7 +17,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.himorfosis.kasirmegono.Kasir.Kasir;
 import com.himorfosis.kasirmegono.Koneksi;
+import com.himorfosis.kasirmegono.Mitra.Mitra;
 import com.himorfosis.kasirmegono.R;
 import com.himorfosis.kasirmegono.Sumber;
 import com.himorfosis.kasirmegono.Volley;
@@ -229,9 +231,16 @@ public class MitraTambah extends AppCompatActivity {
 
                         Toast.makeText(MitraTambah.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
-                        //Starting profile activity
-                        Intent intent = new Intent(MitraTambah.this, Admin.class);
-                        startActivity(intent);
+                        if (getdata.equals("update")) {
+
+                            Intent in = new Intent(MitraTambah.this, Mitra.class);
+                            startActivity(in);
+
+                        } else {
+
+                            Intent in = new Intent(MitraTambah.this, Admin.class);
+                            startActivity(in);
+                        }
 
                     } else {
                         //If the server response is not success
@@ -239,10 +248,16 @@ public class MitraTambah extends AppCompatActivity {
 //                        Toast.makeText(Login.this, "Invalid username or password", Toast.LENGTH_LONG).show();
                         hideDialog();
 
-                        Toast.makeText(MitraTambah.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                        if (getdata.equals("update")) {
 
-                        Intent in = new Intent(MitraTambah.this, Admin.class);
-                        startActivity(in);
+                            Intent in = new Intent(MitraTambah.this, Mitra.class);
+                            startActivity(in);
+
+                        } else {
+
+                            Intent in = new Intent(MitraTambah.this, Admin.class);
+                            startActivity(in);
+                        }
 
                     }
 

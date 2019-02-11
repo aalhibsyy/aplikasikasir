@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.himorfosis.kasirmegono.Kasir.Kasir;
 import com.himorfosis.kasirmegono.Koneksi;
 import com.himorfosis.kasirmegono.R;
 import com.himorfosis.kasirmegono.Sumber;
@@ -157,21 +158,22 @@ public class KaryawanTambah extends AppCompatActivity {
 
                         Toast.makeText(KaryawanTambah.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
-                        //Starting profile activity
-                        Intent intent = new Intent(KaryawanTambah.this, Admin.class);
-                        startActivity(intent);
+                            Intent in = new Intent(KaryawanTambah.this, Kasir.class);
+                            startActivity(in);
 
-                    } else {
+                        } else {
 
                         //If the server response is not success
                         //Displaying an error message on toast
-//                        Toast.makeText(Login.this, "Invalid username or password", Toast.LENGTH_LONG).show();
+
                         hideDialog();
 
                         Toast.makeText(KaryawanTambah.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
-                        Intent in = new Intent(KaryawanTambah.this, Admin.class);
-                        startActivity(in);
+
+                            Intent in = new Intent(KaryawanTambah.this, Admin.class);
+                            startActivity(in);
+
 
                     }
 
@@ -240,9 +242,16 @@ public class KaryawanTambah extends AppCompatActivity {
 
                         Toast.makeText(KaryawanTambah.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
-                        //Starting profile activity
-                        Intent intent = new Intent(KaryawanTambah.this, Admin.class);
-                        startActivity(intent);
+                        if (getdata.equals("update")) {
+
+                            Intent in = new Intent(KaryawanTambah.this, Kasir.class);
+                            startActivity(in);
+
+                        } else {
+
+                            Intent in = new Intent(KaryawanTambah.this, Admin.class);
+                            startActivity(in);
+                        }
 
                     } else {
                         //If the server response is not success
@@ -252,8 +261,16 @@ public class KaryawanTambah extends AppCompatActivity {
 
                         Toast.makeText(KaryawanTambah.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
-                        Intent in = new Intent(KaryawanTambah.this, Admin.class);
-                        startActivity(in);
+                        if (getdata.equals("update")) {
+
+                            Intent in = new Intent(KaryawanTambah.this, Kasir.class);
+                            startActivity(in);
+
+                        } else {
+
+                            Intent in = new Intent(KaryawanTambah.this, Admin.class);
+                            startActivity(in);
+                        }
 
                     }
 

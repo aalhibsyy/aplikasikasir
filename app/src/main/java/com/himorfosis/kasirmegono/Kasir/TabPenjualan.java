@@ -126,9 +126,9 @@ public class TabPenjualan extends Fragment {
 
                                         if (today.equals(tanggal)) {
 
-                                            int penjualan = item.getTotal_harga() * item.getJumlah();
+//                                            int penjualan = item.getTotal_harga() * item.getJumlah();
 
-                                            totalpendapatan = totalpendapatan + penjualan;
+                                            totalpendapatan = totalpendapatan + item.getTotal_harga();
 
                                             listpemesanan.add(item);
 

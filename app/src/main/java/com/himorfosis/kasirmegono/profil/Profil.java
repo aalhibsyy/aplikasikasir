@@ -24,6 +24,7 @@ import com.himorfosis.kasirmegono.Admin.KaryawanTambah;
 import com.himorfosis.kasirmegono.Admin.MitraClassData;
 import com.himorfosis.kasirmegono.Admin.MitraDetail;
 import com.himorfosis.kasirmegono.Admin.MitraListAdapter;
+import com.himorfosis.kasirmegono.Admin.MitraTambah;
 import com.himorfosis.kasirmegono.Koneksi;
 import com.himorfosis.kasirmegono.R;
 import com.himorfosis.kasirmegono.Sumber;
@@ -37,7 +38,7 @@ public class Profil extends Fragment {
 
     TextView email, user, phone, alamat, nama;
 
-    String getemail, getuser, getid, getphone, getalamat;
+    String getemail, getuser, getid, getphone, getalamat, getnama, getpassword;
 
     Button update;
 
@@ -91,13 +92,25 @@ public class Profil extends Fragment {
 
                 if (getuser.equals("Kasir")) {
 
-                    dataKasir();
                     Intent in = new Intent(getContext(), KaryawanTambah.class);
+                    in.putExtra("data", "update");
+                    in.putExtra("id", getid);
+                    in.putExtra("nama", getnama);
+                    in.putExtra("email", getemail);
+                    in.putExtra("password", getpassword);
+                    in.putExtra("phone", getphone);
+                    in.putExtra("alamat", getalamat);
                     startActivity(in);
 
                 } else {
 
-                    dataMitra();
+                    Intent in = new Intent(getContext(), MitraTambah.class);
+                    in.putExtra("data", "update");
+                    in.putExtra("id", getid);
+                    in.putExtra("nama", getnama);
+                    in.putExtra("email", getemail);
+                    in.putExtra("password", getpassword);
+                    startActivity(in);
 
                 }
 
@@ -134,17 +147,23 @@ public class Profil extends Fragment {
                                 item.setAlamat(jsonObject.getString("alamat"));
                                 item.setHandphone(jsonObject.getString("handphone"));
                                 item.setNama(jsonObject.getString("nama_kasir"));
-                                item.setHandphone(jsonObject.getString("handphone"));
                                 item.setPassword(jsonObject.getString("password"));
 
                                 String id = String.valueOf(item.getId_karyawan());
 
                                 if (getid.equals(id)) {
 
-                                    nama.setText(item.getNama());
-                                    email.setText(item.getEmail());
-                                    alamat.setText(item.getAlamat());
-                                    phone.setText(item.getHandphone());
+                                    getid = id;
+                                    getemail = item.getEmail();
+                                    getalamat = item.getAlamat();
+                                    getphone = item.getHandphone();
+                                    getnama = item.getNama();
+                                    getpassword = item.getPassword();
+
+                                    nama.setText(getnama);
+                                    email.setText(getemail);
+                                    alamat.setText(getalamat);
+                                    phone.setText(getphone);
 
                                 }
 
@@ -213,6 +232,11 @@ public class Profil extends Fragment {
                                 String id = String.valueOf(item.getId_mitra());
 
                                 if (getid.equals(id)) {
+
+                                    getid = id;
+                                    getemail = item.getEmail();
+                                    getnama = item.getNama_mitra();
+                                    getpassword = item.getPassword();
 
                                     nama.setText(item.getNama_mitra());
                                     email.setText(item.getEmail());

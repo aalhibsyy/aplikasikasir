@@ -118,9 +118,9 @@ public class RiwayatSemua extends Fragment {
 
                                 if(id_kasir.equals(getid)) {
 
-                                    int penjualan = item.getTotal_harga() * item.getJumlah();
+//                                    int penjualan = item.getTotal_harga() * item.getJumlah();
 
-                                    totalpendapatan = totalpendapatan + penjualan;
+                                    totalpendapatan = totalpendapatan + item.getTotal_harga();
 
                                     listpemesanan.add(item);
 
