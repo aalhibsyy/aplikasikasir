@@ -43,7 +43,7 @@ public class Reward extends Fragment {
     ProgressBar progressBar;
     FrameLayout frame;
     LinearLayout linear;
-    TextView rewardkosong, point;
+    TextView rewardkosong, point, totalpoin;
     ImageView gambar;
 
     String id_mitra;
@@ -68,6 +68,7 @@ public class Reward extends Fragment {
         rewardkosong = view.findViewById(R.id.rewardkosong);
         gambar = view.findViewById(R.id.gambar);
         point = view.findViewById(R.id.point);
+        totalpoin = view.findViewById(R.id.jumlahpoint);
 
         id_mitra = Sumber.getData("akun", "id", getContext());
 
@@ -92,6 +93,7 @@ public class Reward extends Fragment {
                             JSONArray jsonArray = response.getJSONArray("reward");
 
                             int kosong = 0;
+                            Integer poin = 0;
 
                             //now looping through all the elements of the json array
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -106,7 +108,7 @@ public class Reward extends Fragment {
                                 item.setJumlah_poin(jsonObject.getString("jumlah_poin"));
                                 item.setHadiah(jsonObject.getString("hadiah"));
 
-                                Integer poin = Integer.valueOf(item.getJumlah_poin());
+                                poin = Integer.valueOf(item.getJumlah_poin());
 
                                 Log.e("poin", "" + poin);
                                 Log.e("idmitra", "" + id_mitra);
@@ -145,6 +147,8 @@ public class Reward extends Fragment {
                             if (kosong == 0) {
 
                                 rewardkosong.setVisibility(View.VISIBLE);
+                                totalpoin.setVisibility(View.VISIBLE);
+                                totalpoin.setText("Total " + String.valueOf(poin) + " Point");
 
                             }
 

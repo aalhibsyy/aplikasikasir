@@ -61,11 +61,24 @@
             android:id="@+id/rewardkosong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Anda tidak memiliki reward"
+            android:text="Point yang anda miliki"
             android:textSize="18dp"
             android:textColor="@color/hitam"
             android:layout_gravity="center"
             android:visibility="invisible"/>
+
+        <TextView
+            android:id="@+id/jumlahpoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total 250 Point"
+            android:textColor="@color/hitam"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            />
 
         <ProgressBar
             android:id="@+id/progress"

@@ -177,7 +177,6 @@ public class TabPenjualan extends Fragment {
                                 }
                             });
 
-
                             // get data and play doa from array datadoa
 
                             Log.e("cek data", "" + cekData);
