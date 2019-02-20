@@ -36,7 +36,7 @@ public class KaryawanTambah extends AppCompatActivity {
     EditText nama, email, password, phone, alamat;
     Button tambah;
 
-    String getid, getemail, getpassword, getphone, getalamat, getnama, getdata;
+    String getid, getemail, getpassword, getphone, getalamat, getnama, getdata, getuser;
 
     ProgressDialog pDialog;
 
@@ -72,7 +72,9 @@ public class KaryawanTambah extends AppCompatActivity {
         getphone = data.getStringExtra("phone");
         getalamat = data.getStringExtra("alamat");
 
-        Log.e("getdata", "" +getdata);
+        getuser = Sumber.getData("akun", "user", getApplicationContext());
+
+        Log.e("getdata", "" + getdata);
 
         if (getdata.equals("update")) {
 
@@ -158,10 +160,10 @@ public class KaryawanTambah extends AppCompatActivity {
 
                         Toast.makeText(KaryawanTambah.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
-                            Intent in = new Intent(KaryawanTambah.this, Kasir.class);
-                            startActivity(in);
+                        Intent in = new Intent(KaryawanTambah.this, Admin.class);
+                        startActivity(in);
 
-                        } else {
+                    } else {
 
                         //If the server response is not success
                         //Displaying an error message on toast
@@ -171,8 +173,8 @@ public class KaryawanTambah extends AppCompatActivity {
                         Toast.makeText(KaryawanTambah.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
 
-                            Intent in = new Intent(KaryawanTambah.this, Admin.class);
-                            startActivity(in);
+                        Intent in = new Intent(KaryawanTambah.this, Admin.class);
+                        startActivity(in);
 
 
                     }
@@ -242,16 +244,8 @@ public class KaryawanTambah extends AppCompatActivity {
 
                         Toast.makeText(KaryawanTambah.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
-                        if (getdata.equals("update")) {
+                        cekUser();
 
-                            Intent in = new Intent(KaryawanTambah.this, Kasir.class);
-                            startActivity(in);
-
-                        } else {
-
-                            Intent in = new Intent(KaryawanTambah.this, Admin.class);
-                            startActivity(in);
-                        }
 
                     } else {
                         //If the server response is not success
@@ -261,16 +255,7 @@ public class KaryawanTambah extends AppCompatActivity {
 
                         Toast.makeText(KaryawanTambah.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
-                        if (getdata.equals("update")) {
-
-                            Intent in = new Intent(KaryawanTambah.this, Kasir.class);
-                            startActivity(in);
-
-                        } else {
-
-                            Intent in = new Intent(KaryawanTambah.this, Admin.class);
-                            startActivity(in);
-                        }
+                        cekUser();
 
                     }
 
@@ -279,8 +264,8 @@ public class KaryawanTambah extends AppCompatActivity {
 
                     hideDialog();
 
-                    Intent in = new Intent(KaryawanTambah.this, Admin.class);
-                    startActivity(in);
+                    cekUser();
+
 
                 }
             }
@@ -314,6 +299,21 @@ public class KaryawanTambah extends AppCompatActivity {
         };
 
         Volley.getInstance().addToRequestQueue(stringRequest);
+
+    }
+
+    private void cekUser() {
+
+        if (getuser.equals("kasir")) {
+
+            Intent in = new Intent(KaryawanTambah.this, Kasir.class);
+            startActivity(in);
+
+        } else {
+
+            Intent in = new Intent(KaryawanTambah.this, Admin.class);
+            startActivity(in);
+        }
 
     }
 
