@@ -30,7 +30,6 @@ import com.himorfosis.kasirmegono.Login;
 import com.himorfosis.kasirmegono.Penjualan.PenjualanClassData;
 import com.himorfosis.kasirmegono.Produk.Produk;
 import com.himorfosis.kasirmegono.R;
-import com.himorfosis.kasirmegono.Reward.ScanReward;
 import com.himorfosis.kasirmegono.Sumber;
 import com.himorfosis.kasirmegono.Volley;
 import com.itextpdf.text.BaseColor;
@@ -185,12 +184,7 @@ public class  Admin extends AppCompatActivity
                 break;
 
             case R.id.karyawan:
-                fragment = new Karyawan();
-
-                break;
-
-            case R.id.mitra:
-                fragment = new MitraFragment();
+                fragment = new Pengguna();
 
                 break;
 
@@ -199,20 +193,20 @@ public class  Admin extends AppCompatActivity
 
                 break;
 
-            case R.id.scanreward:
+            case R.id.pelanggan:
 
-                fragment = new ScanReward();
-
-                break;
-
-            case R.id.eksport:
-
-                pDialog.setMessage("Memproses Data ...");
-                showDialog();
-
-                getDataPenjualan();
+                fragment = new Pelanggan();
 
                 break;
+
+//            case R.id.eksport:
+//
+//                pDialog.setMessage("Memproses Data ...");
+//                showDialog();
+//
+//                getDataPenjualan();
+//
+//                break;
 
             case R.id.logout:
                 Sumber.deleteData("akun", getApplicationContext());
@@ -390,7 +384,7 @@ public class  Admin extends AppCompatActivity
                                 //creating a hero object and giving them the values from json object
                                 PenjualanClassData item = new PenjualanClassData();
 
-                                item.setId_pemesanan(jsonObject.getInt("id_pemesanan"));
+                                item.setId_pemesanan(jsonObject.getString("id_pemesanan"));
                                 item.setId_produk(jsonObject.getInt("id_produk"));
                                 item.setEmail_kasir(jsonObject.getString("email"));
                                 item.setBayar(jsonObject.getInt("bayar"));

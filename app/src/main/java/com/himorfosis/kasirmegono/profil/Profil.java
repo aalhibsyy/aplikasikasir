@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -18,13 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.himorfosis.kasirmegono.Admin.KaryawanClassData;
-import com.himorfosis.kasirmegono.Admin.KaryawanDetail;
-import com.himorfosis.kasirmegono.Admin.KaryawanListAdapter;
 import com.himorfosis.kasirmegono.Admin.KaryawanTambah;
-import com.himorfosis.kasirmegono.Admin.MitraClassData;
-import com.himorfosis.kasirmegono.Admin.MitraDetail;
-import com.himorfosis.kasirmegono.Admin.MitraListAdapter;
-import com.himorfosis.kasirmegono.Admin.MitraTambah;
 import com.himorfosis.kasirmegono.Koneksi;
 import com.himorfosis.kasirmegono.R;
 import com.himorfosis.kasirmegono.Sumber;
@@ -104,13 +97,13 @@ public class Profil extends Fragment {
 
                 } else {
 
-                    Intent in = new Intent(getContext(), MitraTambah.class);
-                    in.putExtra("data", "update");
-                    in.putExtra("id", getid);
-                    in.putExtra("nama", getnama);
-                    in.putExtra("email", getemail);
-                    in.putExtra("password", getpassword);
-                    startActivity(in);
+//                    Intent in = new Intent(getContext(), MitraTambah.class);
+//                    in.putExtra("data", "update");
+//                    in.putExtra("id", getid);
+//                    in.putExtra("nama", getnama);
+//                    in.putExtra("email", getemail);
+//                    in.putExtra("password", getpassword);
+//                    startActivity(in);
 
                 }
 
@@ -202,82 +195,82 @@ public class Profil extends Fragment {
     }
 
     private void dataMitra() {
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Koneksi.mitra, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        progressBar.setVisibility(View.GONE);
-                        frame.setVisibility(View.VISIBLE);
-
-                        try {
-
-                            JSONArray jsonArray = response.getJSONArray("mitra");
-
-                            //now looping through all the elements of the json array
-                            for (int i = 0; i < jsonArray.length(); i++) {
-
-                                //getting the json object of the particular index inside the array
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                                //creating a hero object and giving them the values from json object
-                                MitraClassData item = new MitraClassData();
-
-                                item.setId_mitra(jsonObject.getInt("id_mitra"));
-                                item.setEmail(jsonObject.getString("email"));
-                                item.setNama_mitra(jsonObject.getString("nama_mitra"));
-                                item.setPassword(jsonObject.getString("password"));
-
-                                String id = String.valueOf(item.getId_mitra());
-
-                                if (getid.equals(id)) {
-
-                                    getid = id;
-                                    getemail = item.getEmail();
-                                    getnama = item.getNama_mitra();
-                                    getpassword = item.getPassword();
-
-                                    nama.setText(item.getNama_mitra());
-                                    email.setText(item.getEmail());
-
-                                    linalamat.setVisibility(View.INVISIBLE);
-                                    linphone.setVisibility(View.INVISIBLE);
-
-                                }
-
-                            }
-
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-
-                            Log.e("error", "" + e);
-
-                            progressBar.setVisibility(View.GONE);
-
-                            Sumber.toastShow(getContext(), "error");
-
-
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        Log.e("error", "" +error);
-
-                        progressBar.setVisibility(View.GONE);
-
-                        Sumber.toastShow(getContext(), "error");
-
-                    }
-                });
-
-        //adding the string request to request queue
-        Volley.getInstance().addToRequestQueue(jsonObjectRequest);
+//
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Koneksi.mitra, null,
+//                new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//
+//                        progressBar.setVisibility(View.GONE);
+//                        frame.setVisibility(View.VISIBLE);
+//
+//                        try {
+//
+//                            JSONArray jsonArray = response.getJSONArray("mitra");
+//
+//                            //now looping through all the elements of the json array
+//                            for (int i = 0; i < jsonArray.length(); i++) {
+//
+//                                //getting the json object of the particular index inside the array
+//                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+//
+//                                //creating a hero object and giving them the values from json object
+//                                MitraClassData item = new MitraClassData();
+//
+//                                item.setId_mitra(jsonObject.getInt("id_mitra"));
+//                                item.setEmail(jsonObject.getString("email"));
+//                                item.setNama_mitra(jsonObject.getString("nama_mitra"));
+//                                item.setPassword(jsonObject.getString("password"));
+//
+//                                String id = String.valueOf(item.getId_mitra());
+//
+//                                if (getid.equals(id)) {
+//
+//                                    getid = id;
+//                                    getemail = item.getEmail();
+//                                    getnama = item.getNama_mitra();
+//                                    getpassword = item.getPassword();
+//
+//                                    nama.setText(item.getNama_mitra());
+//                                    email.setText(item.getEmail());
+//
+//                                    linalamat.setVisibility(View.INVISIBLE);
+//                                    linphone.setVisibility(View.INVISIBLE);
+//
+//                                }
+//
+//                            }
+//
+//
+//
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//
+//                            Log.e("error", "" + e);
+//
+//                            progressBar.setVisibility(View.GONE);
+//
+//                            Sumber.toastShow(getContext(), "error");
+//
+//
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//
+//                        Log.e("error", "" +error);
+//
+//                        progressBar.setVisibility(View.GONE);
+//
+//                        Sumber.toastShow(getContext(), "error");
+//
+//                    }
+//                });
+//
+//        //adding the string request to request queue
+//        Volley.getInstance().addToRequestQueue(jsonObjectRequest);
 
     }
 

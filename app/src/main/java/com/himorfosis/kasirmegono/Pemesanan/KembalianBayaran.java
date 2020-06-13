@@ -2,9 +2,9 @@ package com.himorfosis.kasirmegono.Pemesanan;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,13 +15,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.himorfosis.kasirmegono.Admin.Admin;
 import com.himorfosis.kasirmegono.Database;
 import com.himorfosis.kasirmegono.Kasir.BeliClassData;
 import com.himorfosis.kasirmegono.Kasir.Kasir;
 import com.himorfosis.kasirmegono.Koneksi;
-import com.himorfosis.kasirmegono.Login;
-import com.himorfosis.kasirmegono.Mitra.Mitra;
 import com.himorfosis.kasirmegono.R;
 import com.himorfosis.kasirmegono.Sumber;
 import com.himorfosis.kasirmegono.Volley;
@@ -43,7 +40,7 @@ public class KembalianBayaran extends AppCompatActivity {
     TextView kembalian, total, dibayar;
     Button selesai;
 
-    String getbayar, gettagihan, datetime, getidkasir, getuser, itemtotal, jsondata, id_reward, jumlah_poin;
+    String getbayar, gettagihan, datetime, getidkasir, getuser, itemtotal, jsondata, id_reward, jumlah_poin, getToken, idPelanggan;
 
     JSONObject jsonpost;
     Database db;
@@ -72,6 +69,7 @@ public class KembalianBayaran extends AppCompatActivity {
         textToolbar.setText("Kembalian");
 
         db = new Database(getApplicationContext());
+        getToken = Sumber.getData("akun", "token", getApplicationContext());
 
         //        Progress dialog
 
@@ -97,6 +95,7 @@ public class KembalianBayaran extends AppCompatActivity {
         getidkasir = Sumber.getData("akun", "id", getApplicationContext());
         getuser = Sumber.getData("akun", "user", getApplicationContext());
         itemtotal = Sumber.getData("tagihan", "total", getApplicationContext());
+        idPelanggan = Sumber.getData("pemesanan", "pembeli", getApplicationContext());
 
 
         // get data from db
@@ -135,175 +134,15 @@ public class KembalianBayaran extends AppCompatActivity {
                 pDialog.setMessage("Proses transaksi ...");
                 showDialog();
 
-                if (getuser.equals("Mitra")) {
 
-                    cekRewardMitra();
 
                     dataJson();
 
                     pemesananPost();
 
-
-                } else {
-
-                    dataJson();
-
-                    pemesananPost();
-
-                }
 
             }
         });
-    }
-
-    private void cekRewardMitra() {
-
-        Log.e("cek ", "reward Mitra");
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Koneksi.reward_cek,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //If we are getting success from server
-
-                        try {
-
-                            JSONObject data = new JSONObject(response);
-
-                            if (!data.getBoolean("error")) {
-
-                                JSONObject reward = data.getJSONObject("reward");
-
-                                id_reward = reward.getString("id_reward");
-                                jumlah_poin = reward.getString("jumlah_poin");
-                                String hadiah = reward.getString("hadiah");
-
-                                Log.e("reward id", "" + id_reward);
-                                Log.e("jumlah_poin", "" + jumlah_poin);
-                                Log.e("hadiah", "" + hadiah);
-
-                                // menjumlah poin
-
-                                Integer poin = Integer.valueOf(jumlah_poin);
-
-                                poin = poin + 10;
-
-                                jumlah_poin = String.valueOf(poin);
-
-                            }
-
-                            updateRewardMitra();
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-
-                            Log.e("error", "" +e );
-
-                            Sumber.toastShow(getApplicationContext(), "Reward Gagal");
-
-                            hideDialog();
-
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //You can handle error here if you want
-
-//                        Sumber.dialogHide(getApplicationContext());
-                        hideDialog();
-
-                        Log.e("error", "" + error);
-
-
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                //Adding parameters to request
-
-                // mengirim data json ke server
-                params.put("id_mitra", getidkasir);
-
-                //returning parameter
-                return params;
-            }
-        };
-
-        Volley.getInstance().addToRequestQueue(stringRequest);
-
-
-    }
-
-    private void updateRewardMitra() {
-
-        Log.e("update ", "reward Mitra");
-        Log.e("id_reward ", "" +id_reward );
-        Log.e("id_mitra ", "" + getidkasir);
-        Log.e("id_mitra ", "" + jumlah_poin);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Koneksi.reward_update,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //If we are getting success from server
-
-                        try {
-
-                            JSONObject data = new JSONObject(response);
-
-                            if (!data.getBoolean("error")) {
-
-                                Log.e("update reward ", "sukses");
-                                Log.e("data", "" +data);
-
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-
-                            Log.e("error", "" +e );
-
-                            Sumber.toastShow(getApplicationContext(), "Reward Gagal");
-
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //You can handle error here if you want
-
-//                        Sumber.dialogHide(getApplicationContext());
-                        hideDialog();
-
-                        Log.e("error", "" + error);
-
-
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                //Adding parameters to request
-
-                // mengirim data json ke server
-                params.put("id_reward", id_reward);
-                params.put("id_mitra", getidkasir);
-                params.put("jumlah_poin", jumlah_poin);
-
-                //returning parameter
-                return params;
-            }
-        };
-
-        Volley.getInstance().addToRequestQueue(stringRequest);
-
     }
 
     private void dataJson() {
@@ -313,6 +152,7 @@ public class KembalianBayaran extends AppCompatActivity {
             jsonpost = new JSONObject();
 
             jsonpost.put("waktu", datetime);
+            jsonpost.put("id_pelanggan", idPelanggan);
             jsonpost.put("id_kasir", getidkasir);
             jsonpost.put("total_harga", gettagihan);
             jsonpost.put("bayar", getbayar);
@@ -385,17 +225,13 @@ public class KembalianBayaran extends AppCompatActivity {
 
                                 Sumber.toastShow(getApplicationContext(), "Transaksi Sukses");
 
-                                if (getuser.equals("Kasir")) {
+
 
                                     Intent in = new Intent(KembalianBayaran.this, Kasir.class);
                                     startActivity(in);
 
-                                } else {
 
-                                    Intent in = new Intent(KembalianBayaran.this, Mitra.class);
-                                    startActivity(in);
 
-                                }
 
                             }
 
@@ -436,6 +272,14 @@ public class KembalianBayaran extends AppCompatActivity {
                 //returning parameter
                 return params;
             }
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("Authorization", "Bearer "+ getToken);
+                    return params;
+                }
+
+
         };
 
         Volley.getInstance().addToRequestQueue(stringRequest);

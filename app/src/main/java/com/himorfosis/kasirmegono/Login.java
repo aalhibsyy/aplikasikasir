@@ -17,7 +17,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.himorfosis.kasirmegono.Admin.Admin;
 import com.himorfosis.kasirmegono.Kasir.Kasir;
-import com.himorfosis.kasirmegono.Mitra.Mitra;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,54 +84,49 @@ public class Login extends AppCompatActivity {
                         try {
 
                             JSONObject data = new JSONObject(response);
+//                            String status = data.getString("status");
+                            String error = data.getString("error");
+                            Log.e("error", " " + error);
 
-                            if (!data.getBoolean("error")) {
+                            if (error.equals("false")) {
 
-                                JSONObject akun = data.getJSONObject("user");
 
-                                String email = akun.getString("email");
-                                String pass = akun.getString("password");
-                                String user = akun.getString("user");
+                                String id = data.getString("id");
+                                String email = data.getString("email");
+                                String user = data.getString("user");
+                                String token = data.getString("token");
 
+                                Log.e("id", "" +id);
                                 Log.e("akun", "" + email);
-                                Log.e("akun", "" + pass);
                                 Log.e("akun", "" + user);
+                                Log.e("akun", "" + token);
+
+
 
                                 if (user.equals("Admin")) {
 
                                     Intent intent = new Intent(Login.this, Admin.class);
                                     startActivity(intent);
 
-                                } else if (user.equals("Kasir")) {
-
-                                    String id = akun.getString("id");
-                                    Sumber.saveData("akun", "id", id, getApplicationContext());
-
-                                    Log.e("id", "" +id);
+                                } else  if (user.equals("Kasir")) {
 
                                     Intent intent = new Intent(Login.this, Kasir.class);
                                     startActivity(intent);
 
 //                                    Sumber.toastShow(getApplicationContext(), "Kasir");
 
-                                } else {
-
-                                    String id = akun.getString("id");
-                                    Sumber.saveData("akun", "id", id, getApplicationContext());
-
-                                    Intent intent = new Intent(Login.this, Mitra.class);
-                                    startActivity(intent);
-
                                 }
 
+                                Sumber.saveData("akun", "id", id, getApplicationContext());
                                 Sumber.saveData("akun", "email", getemail, getApplicationContext());
                                 Sumber.saveData("akun", "password", getpass, getApplicationContext());
                                 Sumber.saveData("akun", "user", user, getApplicationContext());
-
+                                Sumber.saveData("akun", "token", token, getApplicationContext());
 
                             }
 
                             Sumber.toastShow(getApplicationContext(), "Login Sukses");
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();

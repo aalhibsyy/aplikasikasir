@@ -1,7 +1,10 @@
 package com.himorfosis.kasirmegono.Pemesanan;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -9,15 +12,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.himorfosis.kasirmegono.Admin.PelangganClassData;
+import com.himorfosis.kasirmegono.Admin.PelangganDetail;
+import com.himorfosis.kasirmegono.Admin.PelangganListAdapter;
 import com.himorfosis.kasirmegono.Database;
 import com.himorfosis.kasirmegono.Kasir.BeliClassData;
 import com.himorfosis.kasirmegono.Koneksi;
@@ -34,7 +44,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.android.volley.VolleyLog.TAG;
+import android.content.Intent;
 
 public class TabPemesanan extends Fragment {
 
@@ -47,17 +62,11 @@ public class TabPemesanan extends Fragment {
 
     Database db;
     List<BeliClassData> databeli = new ArrayList<>();
-
-    String[] pembeli = {"Umum", "Gojek", "Grab"};
-    Integer pilihpembeli = 0;
-    String getpembeli, getuser;
-
+    String getpembeli, getuser, idPelanggan,getalamat,getphone,getnama;
+    String getToken;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        //Returning the layout file after inflating
-        //Change R.layout.tab1 in you classes
         return inflater.inflate(R.layout.tabpemesanan, container, false);
 
     }
@@ -67,12 +76,20 @@ public class TabPemesanan extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         db = new Database(getContext());
+        getToken = Sumber.getData("akun", "token", getActivity().getApplicationContext());
 
         gridView = view.findViewById(R.id.gridview);
         checkout = view.findViewById(R.id.checkout);
         kosong = view.findViewById(R.id.kosong);
         progressBar = view.findViewById(R.id.progress);
 
+
+        Bundle bundle = this.getArguments();
+
+        if(bundle != null){
+           idPelanggan = bundle.getString("idPelanggan");
+        }
+        Log.e("ID PELANGGAN", "" +idPelanggan);
         Sumber.deleteDataInt("pesanan", getContext());
         getuser = Sumber.getData("akun", "user", getContext());
 
@@ -108,29 +125,6 @@ public class TabPemesanan extends Fragment {
 
                     cekpembeli();
 
-                } else {
-
-                    getpembeli = "Umum";
-
-                    Log.e("pembeli", "" +getpembeli);
-
-                    Sumber.saveData("pemesanan", "pembeli", getpembeli, getContext());
-
-                    databeli = db.getBeli();
-
-                    Log.e("database", "" +databeli);
-
-                    if (databeli.isEmpty()) {
-
-                        Sumber.toastShow(getContext(), "Harap pilih produk");
-
-                    } else {
-
-                        Intent in = new Intent(getContext(), Periksa.class);
-                        startActivity(in);
-
-                    }
-
                 }
 
             }
@@ -138,60 +132,17 @@ public class TabPemesanan extends Fragment {
 
     }
 
+
     private void cekpembeli() {
-
-        AlertDialog dialog = new AlertDialog.Builder(getContext())
-
-                .setTitle("Pilih pelanggan :")
-                .setSingleChoiceItems(pembeli, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        pilihpembeli = which;
-
-                    }
-                })
-
-                .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        dialog.dismiss();
-
-                    }
-                })
-
-                .setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        getpembeli = pembeli[pilihpembeli];
-
-                        Log.e("pembeli", "" +getpembeli);
-
-                        Sumber.saveData("pemesanan", "pembeli", getpembeli, getContext());
-
-                        databeli = db.getBeli();
-
-                        Log.e("database", "" +databeli);
-
-                        if (databeli.isEmpty()) {
-
-                            Sumber.toastShow(getContext(), "Harap pilih produk");
-
-                        } else {
-
-                            Intent in = new Intent(getContext(), Periksa.class);
-                            startActivity(in);
-
-                        }
-
-                    }
-                })
-
-                .create();
-        dialog.show();
-
+        Sumber.saveData("pemesanan", "pembeli", idPelanggan, getContext());
+        databeli = db.getBeli();
+        Log.e("database", "" +databeli);
+        if (databeli.isEmpty()) {
+            Sumber.toastShow(getContext(), "Harap pilih produk");
+        } else {
+            Intent in = new Intent(getContext(), Periksa.class);
+            startActivity(in);
+        }
     }
 
     private void getproduk() {
@@ -212,7 +163,7 @@ public class TabPemesanan extends Fragment {
 
                         try {
 
-                            JSONArray jsonArray = response.getJSONArray("produk");
+                            JSONArray jsonArray = response.getJSONArray("data");
 
                             Log.e("json array", "" + jsonArray);
 
@@ -230,8 +181,6 @@ public class TabPemesanan extends Fragment {
                                 item.setNama_produk(jsonObject.getString("nama_produk"));
                                 item.setGambar(jsonObject.getString("gambar_produk"));
                                 item.setHarga(jsonObject.getInt("harga"));
-                                item.setHarga_gojek(jsonObject.getInt("harga_gojek"));
-                                item.setHarga_grab(jsonObject.getInt("harga_grab"));
 
                                 listproduk.add(item);
 
@@ -260,6 +209,7 @@ public class TabPemesanan extends Fragment {
                             e.printStackTrace();
 
                             Log.e("error", "" + e);
+                            Log.e("TOKEN", "" + getToken);
 
                             progressBar.setVisibility(View.GONE);
                             kosong.setVisibility(View.VISIBLE);
@@ -274,6 +224,7 @@ public class TabPemesanan extends Fragment {
                     public void onErrorResponse(VolleyError error) {
 
                         Log.e("error", "" +error);
+                        Log.e("TOKEN", "" + getToken);
 
                         progressBar.setVisibility(View.GONE);
 
@@ -286,7 +237,14 @@ public class TabPemesanan extends Fragment {
 
 
                     }
-                });
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer "+ getToken);
+                return params;
+            }
+        };
 
         //adding the string request to request queue
         Volley.getInstance().addToRequestQueue(jsonObjectRequest);

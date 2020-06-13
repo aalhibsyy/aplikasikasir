@@ -9,32 +9,23 @@
             android:icon="@drawable/basket"
             android:title="Produk" />
         <item
+            android:id="@+id/pelanggan"
+            android:icon="@drawable/user"
+            android:title="Pelanggan" />
+        <item
             android:id="@+id/laporan"
             android:icon="@drawable/print"
             android:title="Laporan" />
         <item
             android:id="@+id/karyawan"
             android:icon="@drawable/user"
-            android:title="Karyawan" />
+            android:title="Pengguna" />
 
-        <item
-            android:id="@+id/mitra"
-            android:icon="@drawable/store"
-            android:title="Mitra" />
-
-        <item
-            android:id="@+id/scanreward"
-            android:icon="@drawable/scan"
-            android:title="Scan Reward" />
 
     </group>
 
     <item android:title="">
         <menu>
-            <item
-                android:id="@+id/eksport"
-                android:icon="@drawable/eksport"
-                android:title="Eksport data" />
             <item
                 android:id="@+id/logout"
                 android:icon="@drawable/ic_menu_send"

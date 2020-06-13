@@ -13,10 +13,12 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.himorfosis.kasirmegono.Database;
 import com.himorfosis.kasirmegono.Koneksi;
 import com.himorfosis.kasirmegono.Penjualan.PenjualanAdapter;
 import com.himorfosis.kasirmegono.Penjualan.PenjualanClassData;
@@ -33,7 +35,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TabPenjualan extends Fragment {
 
@@ -43,11 +47,11 @@ public class TabPenjualan extends Fragment {
     TextView kosong, pendapatan;
     List<PenjualanClassData> listpemesanan = new ArrayList<>();
     PenjualanAdapter adapter;
-
+    Database db;
+    String getToken;
     String datetime, today, getid;
 
     int totalpendapatan = 0;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,6 +66,8 @@ public class TabPenjualan extends Fragment {
         setHasOptionsMenu(true);
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Laporan");
+        db = new Database(getActivity().getApplicationContext());
+        getToken = Sumber.getData("akun", "token", getActivity().getApplicationContext());
 
         list = view.findViewById(R.id.list);
         progressBar = view.findViewById(R.id.progress);
@@ -106,6 +112,7 @@ public class TabPenjualan extends Fragment {
                                 PenjualanClassData item = new PenjualanClassData();
 
                                 item.setId_produk(jsonObject.getInt("id_produk"));
+                                item.setId_pemesanan(jsonObject.getString("id_pemesanan"));
                                 item.setId_kasir(jsonObject.getInt("id_kasir"));
                                 item.setBayar(jsonObject.getInt("bayar"));
                                 item.setNama_produk(jsonObject.getString("nama_produk"));
@@ -209,7 +216,14 @@ public class TabPenjualan extends Fragment {
                         kosong.setText("Produk kosong");
 
                     }
-                });
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer "+ getToken);
+                return params;
+            }
+        };
 
         //adding the string request to request queue
         Volley.getInstance().addToRequestQueue(jsonObjectRequest);

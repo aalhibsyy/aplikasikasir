@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.himorfosis.kasirmegono.Admin.Admin;
 import com.himorfosis.kasirmegono.Kasir.Kasir;
-import com.himorfosis.kasirmegono.Mitra.Mitra;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -45,15 +44,9 @@ public class SplashScreen extends AppCompatActivity {
 
                         Intent intent = new Intent(SplashScreen.this, Admin.class);
                         startActivity(intent);
-
-                    } else if (getuser.equals("Kasir")) {
-
-                        Intent intent = new Intent(SplashScreen.this, Kasir.class);
-                        startActivity(intent);
-
                     } else {
 
-                        Intent intent = new Intent(SplashScreen.this, Mitra.class);
+                        Intent intent = new Intent(SplashScreen.this, Kasir.class);
                         startActivity(intent);
 
                     }

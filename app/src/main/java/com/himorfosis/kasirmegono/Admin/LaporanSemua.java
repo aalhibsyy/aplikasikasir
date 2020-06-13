@@ -13,15 +13,18 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.himorfosis.kasirmegono.Database;
 import com.himorfosis.kasirmegono.Koneksi;
 import com.himorfosis.kasirmegono.Penjualan.PenjualanAdapter;
 import com.himorfosis.kasirmegono.Penjualan.PenjualanClassData;
 import com.himorfosis.kasirmegono.Penjualan.PenjualanDetail;
 import com.himorfosis.kasirmegono.R;
+import com.himorfosis.kasirmegono.Sumber;
 import com.himorfosis.kasirmegono.Volley;
 
 import org.json.JSONArray;
@@ -29,7 +32,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LaporanSemua extends Fragment {
 
@@ -41,6 +46,8 @@ public class LaporanSemua extends Fragment {
     PenjualanAdapter adapter;
 
     int totalpendapatan = 0;
+    Database db;
+    String getToken;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +62,9 @@ public class LaporanSemua extends Fragment {
         setHasOptionsMenu(true);
         super.onViewCreated(view, savedInstanceState);
 //        getActivity().setTitle("Penjualan");
+
+        db = new Database(getActivity().getApplicationContext());
+        getToken = Sumber.getData("akun", "token", getActivity().getApplicationContext());
 
         list = view.findViewById(R.id.list);
         progressBar = view.findViewById(R.id.progress);
@@ -95,7 +105,7 @@ public class LaporanSemua extends Fragment {
                                 PenjualanClassData item = new PenjualanClassData();
 
 
-                                item.setId_pemesanan(jsonObject.getInt("id_pemesanan"));
+                                item.setId_pemesanan(jsonObject.getString("id_pemesanan"));
                                 item.setId_produk(jsonObject.getInt("id_produk"));
                                 item.setId_kasir(jsonObject.getInt("id_kasir"));
                                 item.setBayar(jsonObject.getInt("bayar"));
@@ -185,7 +195,14 @@ public class LaporanSemua extends Fragment {
 //
 
                     }
-                });
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer "+ getToken);
+                return params;
+            }
+        };
 
         //adding the string request to request queue
         Volley.getInstance().addToRequestQueue(jsonObjectRequest);

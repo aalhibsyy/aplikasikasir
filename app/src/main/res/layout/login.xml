@@ -57,7 +57,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="20dp"
-                        android:hint="Email"/>
+                        android:hint="Username"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -89,7 +89,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="20dp"
-                        android:hint="Password"/>
+                        android:hint="Password"
+                        android:inputType="textPassword"/>
 
                 </android.support.design.widget.TextInputLayout>
 

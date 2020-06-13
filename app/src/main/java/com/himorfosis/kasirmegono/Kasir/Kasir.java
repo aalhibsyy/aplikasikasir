@@ -16,8 +16,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.himorfosis.kasirmegono.Admin.Pelanggan;
 import com.himorfosis.kasirmegono.Database;
 import com.himorfosis.kasirmegono.Login;
+import com.himorfosis.kasirmegono.Pemesanan.PilihPelanggan;
 import com.himorfosis.kasirmegono.Pemesanan.TabPemesanan;
 import com.himorfosis.kasirmegono.R;
 import com.himorfosis.kasirmegono.Sumber;
@@ -133,15 +135,20 @@ public class Kasir extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.pemesanan) {
-            fragment = new TabPemesanan();
+            fragment = new PilihPelanggan();
+//            fragment = new TabPemesanan();
 
         } else if (id == R.id.penjualan) {
 
             fragment = new TabPenjualan();
 
-        } else if (id == R.id.profil) {
+        } else if (id == R.id.pelanggan) {
 
-            fragment = new Profil();
+            fragment = new Pelanggan();
+
+//        } else if (id == R.id.profil) {
+//
+//            fragment = new Profil();
 
         } else if (id == R.id.logout) {
 

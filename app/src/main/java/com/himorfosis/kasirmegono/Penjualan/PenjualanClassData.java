@@ -2,7 +2,7 @@ package com.himorfosis.kasirmegono.Penjualan;
 
 public class PenjualanClassData {
 
-    private Integer id_pemesanan;
+    private String id_pemesanan;
     private String waktu;
     private Integer jumlah;
     private Integer id_kasir;
@@ -19,11 +19,11 @@ public class PenjualanClassData {
     private Integer harga_produk;
     private Integer id_mitra;
 
-    public Integer getId_pemesanan() {
+    public String getId_pemesanan() {
         return id_pemesanan;
     }
 
-    public void setId_pemesanan(Integer id_pemesanan) {
+    public void setId_pemesanan(String  id_pemesanan) {
         this.id_pemesanan = id_pemesanan;
     }
 

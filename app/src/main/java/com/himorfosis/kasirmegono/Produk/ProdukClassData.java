@@ -4,15 +4,33 @@ import android.content.Intent;
 
 public class ProdukClassData {
 
-    private Integer id_produk;
+
+
+    private String kode_produk;
     private String nama_produk;
     private Integer id_kategori_produk;
-    private Integer id_harga;
+
+    public Integer getStok() {
+        return stok;
+    }
+
+    public void setStok(Integer stok) {
+        this.stok = stok;
+    }
+
+    private Integer stok;
     private String gambar;
     private Integer harga;
-    private Integer harga_gojek;
-    private Integer harga_grab;
     private String kategori;
+    private Integer id_produk;
+
+    public String getKode_produk() {
+        return kode_produk;
+    }
+
+    public void setKode_produk(String kode_produk) {
+        this.kode_produk = kode_produk;
+    }
 
     public Integer getId_produk() {
         return id_produk;
@@ -28,14 +46,6 @@ public class ProdukClassData {
 
     public void setNama_produk(String nama_produk) {
         this.nama_produk = nama_produk;
-    }
-
-    public Integer getId_harga() {
-        return id_harga;
-    }
-
-    public void setId_harga(Integer id_harga) {
-        this.id_harga = id_harga;
     }
 
     public String getGambar() {
@@ -70,19 +80,4 @@ public class ProdukClassData {
         this.kategori = kategori;
     }
 
-    public Integer getHarga_gojek() {
-        return harga_gojek;
-    }
-
-    public void setHarga_gojek(Integer harga_gojek) {
-        this.harga_gojek = harga_gojek;
-    }
-
-    public Integer getHarga_grab() {
-        return harga_grab;
-    }
-
-    public void setHarga_grab(Integer harga_grab) {
-        this.harga_grab = harga_grab;
-    }
 }

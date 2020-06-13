@@ -14,10 +14,12 @@ import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.himorfosis.kasirmegono.Database;
 import com.himorfosis.kasirmegono.Koneksi;
 import com.himorfosis.kasirmegono.R;
 import com.himorfosis.kasirmegono.Sumber;
@@ -28,9 +30,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Produk extends Fragment {
+
+    private static final int REQUEST_ADD = 1;
+    private static final int REQUEST_UPDATE = 2;
 
     FloatingActionButton tambah;
     GridView gridView;
@@ -43,8 +50,13 @@ public class Produk extends Fragment {
 
     ProgressDialog pDialog;
 
-    Integer id_produk;
+    Database db;
+    String getToken;
+
+    String id_produk;
+    String setKode_produk;
     String user;
+
 
 
     @Override
@@ -76,24 +88,26 @@ public class Produk extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Intent in = new Intent(getContext(), ProdukTambah.class);
-                startActivity(in);
+//                Intent in = new Intent(getContext(), ProdukTambah.class);
+//                startActivity(in);
+                Intent intent = new Intent(getActivity(), ProdukTambah.class);
+                intent.putExtra("data", "tambah");
+                startActivityForResult(intent, REQUEST_ADD);
 
             }
         });
-
+        db = new Database(getActivity().getApplicationContext());
+        getToken = Sumber.getData("akun", "token", getActivity().getApplicationContext());
         produk();
 
     }
 
     private void produk() {
 
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Koneksi.produk_api, null,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Koneksi.produk_tambah, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
                         // Showing json data in log monitor
                         Log.e("response", "" + response);
                         Log.e("get", "" + Request.Method.GET);
@@ -108,7 +122,7 @@ public class Produk extends Fragment {
                             //we have the array named hero inside the object
                             //so here we are getting that json array
 
-                            JSONArray jsonArray = response.getJSONArray("produk");
+                            JSONArray jsonArray = response.getJSONArray("data");
 
                             Log.e("json array", "" + jsonArray);
 
@@ -121,12 +135,13 @@ public class Produk extends Fragment {
                                 ProdukClassData item = new ProdukClassData();
 
                                 item.setId_produk(jsonObject.getInt("id_produk"));
+                                item.setKode_produk(jsonObject.getString("kode_produk"));
                                 item.setKategori(jsonObject.getString("kategori"));
                                 item.setNama_produk(jsonObject.getString("nama_produk"));
                                 item.setGambar(jsonObject.getString("gambar_produk"));
                                 item.setHarga(jsonObject.getInt("harga"));
-                                item.setHarga_gojek(jsonObject.getInt("harga_gojek"));
-                                item.setHarga_grab(jsonObject.getInt("harga_grab"));
+                                item.setStok(jsonObject.getInt("stok"));
+
 
                                 listproduk.add(item);
 
@@ -156,10 +171,10 @@ public class Produk extends Fragment {
                                     Intent intent = new Intent(getContext(), ProdukDetail.class);
 
                                     intent.putExtra("id", String.valueOf(data.getId_produk()));
+                                    intent.putExtra("kode", String.valueOf(data.getKode_produk()));
                                     intent.putExtra("nama", data.getNama_produk());
                                     intent.putExtra("harga", String.valueOf(data.getHarga()));
-                                    intent.putExtra("harga_gojek", String.valueOf(data.getHarga_gojek()));
-                                    intent.putExtra("harga_grab", String.valueOf(data.getHarga_grab()));
+                                    intent.putExtra("stok", String.valueOf(data.getStok()));
                                     intent.putExtra("kategori", data.getKategori());
                                     intent.putExtra("gambar", Koneksi.gambar + data.getGambar());
 
@@ -176,6 +191,7 @@ public class Produk extends Fragment {
 
                             Log.e("cek data", "" + cekData);
 
+
                         } catch (JSONException e) {
                             e.printStackTrace();
 
@@ -186,8 +202,11 @@ public class Produk extends Fragment {
                             kosong.setText("Produk kosong");
 
                         }
+
                     }
+
                 },
+
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -203,7 +222,20 @@ public class Produk extends Fragment {
                         kosong.setText("Produk kosong");
 
                     }
-                });
+
+                }) {
+                        @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer "+ getToken);
+                return params;
+            }
+        }
+
+                ;
+
+
+
 
         //adding the string request to request queue
         Volley.getInstance().addToRequestQueue(jsonObjectRequest);

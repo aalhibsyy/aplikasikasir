@@ -38,10 +38,27 @@ dependencies {
     implementation 'me.grantland:autofittextview:0.2.+'
 
     // image upload service
-    compile 'net.gotev:uploadservice:2.1'
-
+    implementation 'net.gotev:uploadservice:2.1'
     // pdf & google drive
     implementation 'com.itextpdf:itextg:5.5.10'
     implementation 'com.google.android.gms:play-services-drive:8.4.0'
+
+//    NEW
+//    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+//    implementation 'com.jakewharton:butterknife-compilerknife:8.8.1'
+//    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+//
+//    implementation 'com.github.bumptech.glide:glide:4.8.0'
+//    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+//
+//    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+//    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+//    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+//
+//    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+//    implementation 'io.reactivex.rxjava2:rxjava:2.0.8'
+//    END NEW
+
+
 
 }

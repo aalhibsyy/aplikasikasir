@@ -1,11 +1,9 @@
 package com.himorfosis.kasirmegono.Pemesanan;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,17 +20,13 @@ import com.himorfosis.kasirmegono.Kasir.BeliClassData;
 import com.himorfosis.kasirmegono.Koneksi;
 import com.himorfosis.kasirmegono.Produk.ProdukClassData;
 import com.himorfosis.kasirmegono.R;
-import com.himorfosis.kasirmegono.Sumber;
 import com.himorfosis.kasirmegono.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class TambahPemesanan extends AppCompatActivity {
@@ -131,8 +125,6 @@ public class TambahPemesanan extends AppCompatActivity {
                                 item.setNama_produk(jsonObject.getString("nama_produk"));
                                 item.setGambar(jsonObject.getString("gambar_produk"));
                                 item.setHarga(jsonObject.getInt("harga"));
-                                item.setHarga_gojek(jsonObject.getInt("harga_gojek"));
-                                item.setHarga_grab(jsonObject.getInt("harga_grab"));
 
                                 listproduk.add(item);
 

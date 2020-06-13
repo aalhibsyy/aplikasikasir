@@ -32,6 +32,8 @@ public class KaryawanDetail extends AppCompatActivity {
 
         textToolbar.setText("Karyawan Detail");
 
+
+
         email = findViewById(R.id.email);
         phone = findViewById(R.id.phone);
         alamat = findViewById(R.id.alamat);
@@ -75,9 +77,7 @@ public class KaryawanDetail extends AppCompatActivity {
         kembali.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 finish();
-
             }
         });
 

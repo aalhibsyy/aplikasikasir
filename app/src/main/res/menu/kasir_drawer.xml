@@ -9,13 +9,17 @@
             android:icon="@drawable/basket"
             android:title="Pemesanan" />
         <item
+            android:id="@+id/pelanggan"
+            android:icon="@drawable/user"
+            android:title="Pelanggan" />
+        <item
             android:id="@+id/penjualan"
             android:icon="@drawable/cart"
             android:title="Penjualan" />
-        <item
+      <!--  <item
             android:id="@+id/profil"
             android:icon="@drawable/user"
-            android:title="Profil" />
+            android:title="Profil" /> -->
 
     </group>
 

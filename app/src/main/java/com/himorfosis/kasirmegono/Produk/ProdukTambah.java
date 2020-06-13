@@ -1,23 +1,19 @@
 package com.himorfosis.kasirmegono.Produk;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,140 +22,145 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.himorfosis.kasirmegono.Admin.Admin;
+import com.himorfosis.kasirmegono.Admin.KaryawanTambah;
+import com.himorfosis.kasirmegono.Database;
 import com.himorfosis.kasirmegono.Koneksi;
 import com.himorfosis.kasirmegono.R;
 import com.himorfosis.kasirmegono.Sumber;
+import com.himorfosis.kasirmegono.Volley;
+import com.himorfosis.kasirmegono.app.AppController;
 
-import net.gotev.uploadservice.MultipartUploadRequest;
-import net.gotev.uploadservice.UploadNotificationConfig;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProdukTambah extends AppCompatActivity {
 
-    EditText nama, hargaumum, hargagojek, hargagrab;
+    LinearLayout buttonChoose;
+    Button buttonUpload;
+    Toolbar toolbar;
+    ImageView imageView;
+    EditText nama,kode,harga,stok;
     TextView kategori;
-    Button tambah;
-    ImageView gambar;
+    Bitmap bitmap, decoded;
+    int success;
+    int PICK_IMAGE_REQUEST = 1;
+    int bitmap_size = 60; // range 1 - 100
     LinearLayout pilihgambar;
-
-    String getid, getnama, getkategori, getharga, gethargagojek, gethargagrab, path, getgambar;
-
-    private Uri filePath;
     ProgressDialog pDialog;
-
-    private static final int STORAGE_PERMISSION_CODE = 123;
-    private int PICK_IMAGE_REQUEST = 1;
-
-    private Bitmap bitmap;
-
-    String[] hargaproduk = {"1000", "1500", "2000", "2500", "3000", "5000", "7000", "10000", "12000", "15000"};
-    String[] kategoriproduk = {"Makanan", "Minuman"};
-    int pilihharga, pilihkategori;
-
+    private static final String TAG = ProdukTambah.class.getSimpleName();
+    private String UPLOAD_URL = Koneksi.produk_tambah;
+    private static final String TAG_SUCCESS = "success";
+    private static final String TAG_MESSAGE = "message";
+    String[] kategoriproduk = {"Sparepart", "Aksesoris", "Lainnya"};
+    int pilihkategori;
+    Database db;
+    String getid,getkode, getnama, getharga,getstok, getkategori, getgambar,user, getToken, getdata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.produk_tambah);
-
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.toolbarclose);
-
         TextView textToolbar = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.toolbartext);
-        Button kembali = (Button) getSupportActionBar().getCustomView().findViewById(R.id.kembali);
-        textToolbar.setText("Tambah Produk");
+        db = new Database(getApplicationContext());
+        getToken = Sumber.getData("akun", "token", getApplicationContext());
 
-        nama = findViewById(R.id.nama);
+
+        buttonChoose = findViewById(R.id.pilihgambar);
+        buttonUpload = findViewById(R.id.tambah);
+
+        kode = (EditText) findViewById(R.id.kode);
+        nama = (EditText) findViewById(R.id.nama);
+        harga = (EditText) findViewById(R.id.harga);
+        stok = (EditText) findViewById(R.id.stok);
         kategori = findViewById(R.id.kategori);
-        hargaumum = findViewById(R.id.hargaumum);
-        hargagojek = findViewById(R.id.hargagojek);
-        hargagrab = findViewById(R.id.hargagrab);
-        tambah = findViewById(R.id.tambah);
-        gambar = findViewById(R.id.gambar);
-        pilihgambar = findViewById(R.id.pilihgambar);
 
-        Intent bundle = getIntent();
 
-        getid = bundle.getStringExtra("id");
-        getnama = bundle.getStringExtra("nama");
-        getharga = bundle.getStringExtra("harga");
-        getkategori = bundle.getStringExtra("kategori");
-        getgambar = bundle.getStringExtra("gambar");
-        gethargagojek = bundle.getStringExtra("harga_gojek");
-        gethargagrab = bundle.getStringExtra("harga_grab");
+        imageView = (ImageView) findViewById(R.id.gambar);
 
-        //Requesting storage permission
-        requestStoragePermission();
-
-        //         Progress dialog
-        pDialog = new ProgressDialog(this);
-        pDialog.setCancelable(false);
-
-        pilihgambar.setOnClickListener(new View.OnClickListener() {
+        buttonChoose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-
-            }
-        });
-
-        tambah.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                getnama = nama.getText().toString();
-                getkategori = kategori.getText().toString();
-                getharga = hargaumum.getText().toString();
-                gethargagojek = hargagojek.getText().toString();
-                gethargagrab = hargagrab.getText().toString();
-
-                if (getnama.equals("") || getkategori.equals("") || getharga.equals("") || gethargagojek.equals("") || gethargagrab.equals("")) {
-
-                    Sumber.toastShow(ProdukTambah.this, "Harap isi secara lengkap");
-
-                } else {
-
-
-                    pDialog.setMessage("Upload produk ...");
-                    showDialog();
-
-                    produk();
-
-                    hideDialog();
-
-
-                }
-
+                showFileChooser();
             }
         });
 
         kategori.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 pilihkategori();
             }
         });
 
-        kembali.setOnClickListener(new View.OnClickListener() {
+        buttonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent in = new Intent(ProdukTambah.this, Admin.class);
-                startActivity(in);
+                if (getdata.equals("update")) {
 
+                    produkUpdate();
+
+                } else {
+
+                    uploadImage();
+                }
             }
         });
 
-    }
+        Intent bundle = getIntent();
+        getdata = bundle.getStringExtra("data");
+        getid = bundle.getStringExtra("id");
+        getkode = bundle.getStringExtra("kode");
+        getnama = bundle.getStringExtra("nama");
+        getharga = bundle.getStringExtra("harga");
+        getstok = bundle.getStringExtra("stok");
+        getkategori = bundle.getStringExtra("kategori");
+        getgambar = bundle.getStringExtra("gambar");
+        user = Sumber.getData("akun", "user", ProdukTambah.this);
+//        Log.e("produk id", getid);
+//        Log.e("produk nama", getnama);
+//        Log.e("produk harga", getharga);
+//        Log.e("produk gambar", getgambar);
+//
+//        Log.e("getdata", "" + getdata);
 
+        if (getdata.equals("update")) {
+
+            kode.setText(getkode);
+            nama.setText(getnama);
+            harga.setText(getharga);
+            stok.setText(getstok);
+            kategori.setText(getkategori);
+            buttonUpload.setText("Update");
+
+            Glide.with(getApplicationContext())
+                    .load(getgambar)
+                    .into(imageView);
+
+            Glide.with(getApplicationContext()).load(getgambar).into(imageView);
+
+            textToolbar.setText("Update Produk");
+
+        } else {
+
+            textToolbar.setText("Tambah");
+
+        }
+    }
     private void pilihkategori() {
 
         AlertDialog dialog = new AlertDialog.Builder(ProdukTambah.this)
@@ -168,27 +169,21 @@ public class ProdukTambah extends AppCompatActivity {
                 .setSingleChoiceItems(kategoriproduk, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         pilihkategori = which;
-
                     }
                 })
 
                 .setNegativeButton("Batal", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         dialog.dismiss();
-
                     }
                 })
 
                 .setPositiveButton("Pilih", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         kategori.setText(kategoriproduk[pilihkategori]);
-
                     }
                 })
 
@@ -196,169 +191,222 @@ public class ProdukTambah extends AppCompatActivity {
         dialog.show();
 
     }
-
-    private void produk() {
-
-        //getting the actual path of the image
-
-        path = getPath(filePath);
-
-        Log.e("gambar", "" + path);
-
-        //Uploading image
-
-        try {
-
-            String uploadId = UUID.randomUUID().toString();
-
-            //Creating a multi part request
-            new MultipartUploadRequest(this, uploadId, Koneksi.produk_tambah)
-                    .addFileToUpload(path, "gambar") //Adding file
-                    .addParameter("nama_produk", getnama)
-                    .addParameter("harga", getharga)
-                    .addParameter("harga_gojek", gethargagojek)
-                    .addParameter("harga_grab", gethargagrab)
-                    .addParameter("kategori", kategori.getText().toString())
-
-                    .setNotificationConfig(new UploadNotificationConfig())
-                    .setMaxRetries(5)
-                    .startUpload();
-
-            //Starting the upload
-
-            Sumber.toastShow(ProdukTambah.this, "Produk berhasil ditambah");
-
-            Intent intent = new Intent(ProdukTambah.this, Admin.class);
-            startActivity(intent);
-
-        } catch (Exception exc) {
-
-            Toast.makeText(this, exc.getMessage(), Toast.LENGTH_SHORT).show();
-
-            Sumber.toastShow(ProdukTambah.this, "Gagal");
-
-        }
-
+    public String getStringImage(Bitmap bmp) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, bitmap_size, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
     }
 
+    private void uploadImage() {
+        //menampilkan progress dialog
+        final ProgressDialog loading = ProgressDialog.show(this, "Uploading...", "Please wait...", false, false);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, UPLOAD_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e(TAG, "Response: " + response.toString());
 
-    //method to get the file path from uri
-    public String getPath(Uri uri) {
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+                            String status = jObj.getString("error");
+                            Log.e("Status", " " + status);
 
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        String document_id = cursor.getString(0);
-        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
-        cursor.close();
+                            if (status.equals("success")) {
+                                Log.e("v Add", jObj.toString());
+                                Toast.makeText(ProdukTambah.this, jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
+//                                kosong();
+                                Intent intent = new Intent(ProdukTambah.this, Admin.class);
+                                startActivity(intent);
 
-        cursor = getContentResolver().query(
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
-        cursor.moveToFirst();
-        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-        cursor.close();
 
-        return path;
-    }
+                            } else {
+                                Toast.makeText(ProdukTambah.this, jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
+                                Sumber.toastShow(ProdukTambah.this, "Gagal");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-    //Requesting permission
-    private void requestStoragePermission() {
+                        //menghilangkan progress dialog
+                        loading.dismiss();
+                        Intent in = new Intent(ProdukTambah.this, Admin.class);
+                        startActivity(in);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //menghilangkan progress dialog
+                        loading.dismiss();
+                        //menampilkan toast
+                        Toast.makeText(ProdukTambah.this, error.getMessage().toString(), Toast.LENGTH_LONG).show();
+                        Log.e(TAG, error.getMessage().toString());
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                //membuat parameters
+                Map<String, String> params = new HashMap<String, String>();
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-            return;
+                //menambah parameter yang di kirim ke web servis
+                params.put("image", getStringImage(decoded));
+                params.put("kode_produk", kode.getText().toString().trim());
+                params.put("nama_produk", nama.getText().toString().trim());
+                params.put("harga", harga.getText().toString().trim());
+                params.put("stok", stok.getText().toString().trim());
+                params.put("kategori", kategori.getText().toString().trim());
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            //If the user has denied the permission previously your code will come to this block
-            //Here you can explain why you need this permission
-            //Explain here why you need this permission
-        }
-        //And finally ask for the permission
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-    }
-
-    //This method will be called when the user will tap on allow or deny
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        //Checking the request code of our request
-        if (requestCode == STORAGE_PERMISSION_CODE) {
-
-            //If permission is granted
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //Displaying a toast
-                Toast.makeText(this, "Izin diberikan sekarang Anda dapat membaca penyimpanan", Toast.LENGTH_LONG).show();
-            } else {
-                //Displaying another toast if permission is not granted
-                Toast.makeText(this, "Ups Anda baru saja menolak izin", Toast.LENGTH_LONG).show();
+                //kembali ke parameters
+                Log.e(TAG, "" + params);
+                return params;
             }
-        }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer "+ getToken);
+                return params;
+            }
+        };
 
+//        AppController.getInstance().addToRequestQueue(stringRequest, tag_json_obj);
+        Volley.getInstance().addToRequestQueue(stringRequest);
     }
 
-    //handling the image chooser activity result
+
+    private void produkUpdate() {
+        //menampilkan progress dialog
+        final ProgressDialog loading = ProgressDialog.show(this, "Uploading...", "Please wait...", false, false);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Koneksi.produk_update,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e(TAG, "Response: " + response.toString());
+
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+                            String status = jObj.getString("error");
+                            Log.e("Status", " " + status);
+
+                            if (status.equals("success")) {
+                                Log.e("v Add", jObj.toString());
+                                Toast.makeText(ProdukTambah.this, jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
+//                                kosong();
+                                Intent intent = new Intent(ProdukTambah.this, Admin.class);
+                                startActivity(intent);
+
+
+                            } else {
+                                Toast.makeText(ProdukTambah.this, jObj.getString(TAG_MESSAGE), Toast.LENGTH_LONG).show();
+                                Sumber.toastShow(ProdukTambah.this, "Gagal");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        //menghilangkan progress dialog
+                        loading.dismiss();
+                        Intent in = new Intent(ProdukTambah.this, Admin.class);
+                        startActivity(in);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //menghilangkan progress dialog
+                        loading.dismiss();
+                        //menampilkan toast
+                        Toast.makeText(ProdukTambah.this, error.getMessage().toString(), Toast.LENGTH_LONG).show();
+                        Log.e(TAG, error.getMessage().toString());
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                //membuat parameters
+                Map<String, String> params = new HashMap<String, String>();
+
+                //menambah parameter yang di kirim ke web servis
+                params.put("image", getStringImage(decoded));
+                params.put("kode_produk", kode.getText().toString().trim());
+                params.put("nama_produk", nama.getText().toString().trim());
+                params.put("harga", harga.getText().toString().trim());
+                params.put("stok", stok.getText().toString().trim());
+                params.put("kategori", kategori.getText().toString().trim());
+                params.put("id",getid);
+
+                //kembali ke parameters
+                Log.e(TAG, "" + params);
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer "+ getToken);
+                return params;
+            }
+        };
+
+//        AppController.getInstance().addToRequestQueue(stringRequest, tag_json_obj);
+        Volley.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            filePath = data.getData();
-
-            Log.e("file path", "" + filePath);
-
+            Uri filePath = data.getData();
             try {
-
+                //mengambil fambar dari Gallery
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                gambar.setImageBitmap(bitmap);
-
+                // 512 adalah resolusi tertinggi setelah image di resize, bisa di ganti.
+                setToImageView(getResizedBitmap(bitmap, 512));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-
-    private void showDialog() {
-
-        if (!pDialog.isShowing())
-            pDialog.show();
-
+    private void kosong() {
+        imageView.setImageResource(0);
+        kode.setText(null);
+        nama.setText(null);
+        harga.setText(null);
+        stok.setText(null);
     }
 
-    private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+    private void setToImageView(Bitmap bmp) {
+        //compress image
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, bitmap_size, bytes);
+        decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(bytes.toByteArray()));
+
+        //menampilkan gambar yang dipilih dari camera/gallery ke ImageView
+        imageView.setImageBitmap(decoded);
     }
 
-    private void isikategori() {
+    // fungsi resize image
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
 
-        final LayoutInflater inflater = LayoutInflater.from(ProdukTambah.this);
-        View dialogview = inflater.inflate(R.layout.inflatterdata, null);
-        final EditText data = dialogview.findViewById(R.id.data);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(ProdukTambah.this);
-
-        builder.setTitle("Tambah kategori");
-        builder.setView(dialogview);
-        builder.setPositiveButton("Tambah", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                kategori.setText(data.getText().toString());
-
-            }
-        });
-
-        builder.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
+        float bitmapRatio = (float) width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
 }

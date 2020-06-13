@@ -103,7 +103,7 @@ public class PemesananAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
 
-                    db.addBeli(new BeliClassData(produk.getId_produk(), 1, produk.getHarga(), produk.getHarga_gojek(), produk.getHarga_grab(), produk.getHarga(), produk.getNama_produk(), produk.getGambar()));
+                    db.addBeli(new BeliClassData(produk.getId_produk(), 1, produk.getHarga(), produk.getHarga(), produk.getNama_produk(), produk.getGambar()));
 
                     holder.tambah.setVisibility(View.INVISIBLE);
                     holder.ditambah.setVisibility(View.VISIBLE);
@@ -146,9 +146,10 @@ public class PemesananAdapter extends BaseAdapter {
 
                             holder.jumlah.setText(String.valueOf(jumlahpesanan));
 
-                            db.updateBeli(new BeliClassData(produk.getId_produk(), jumlahpesanan, produk.getHarga(), produk.getHarga_gojek(), produk.getHarga_grab(), produk.getHarga(), produk.getNama_produk(), produk.getGambar()));
+                            db.updateBeli(new BeliClassData(produk.getId_produk(), jumlahpesanan, produk.getHarga(), produk.getHarga(), produk.getNama_produk(), produk.getGambar()));
 
                             Log.e("tambah id", "" + produk.getId_produk());
+                            Log.e("nama produk", "" + produk.getNama_produk());
 
                         }
 
@@ -194,7 +195,7 @@ public class PemesananAdapter extends BaseAdapter {
 
                                 holder.jumlah.setText(String.valueOf(jumlahpesanan));
 
-                                db.updateBeli(new BeliClassData(produk.getId_produk(), jumlahpesanan, produk.getHarga(), produk.getHarga_gojek(), produk.getHarga_grab(), produk.getHarga(), produk.getNama_produk(), produk.getGambar()));
+                                db.updateBeli(new BeliClassData(produk.getId_produk(), jumlahpesanan, produk.getHarga(), produk.getHarga(), produk.getNama_produk(), produk.getGambar()));
 
                             }
 
@@ -230,6 +231,7 @@ public class PemesananAdapter extends BaseAdapter {
 
             cekproduk = db.getBeli();
 
+
             for (int a = 0; a < cekproduk.size(); a++) {
 
                 BeliClassData data = cekproduk.get(a);
@@ -252,10 +254,7 @@ public class PemesananAdapter extends BaseAdapter {
                     cekproduk = db.getBeli();
 
                 }
-
             }
-
-
         }
 
         return convertView;

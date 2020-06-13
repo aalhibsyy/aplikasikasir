@@ -2,33 +2,33 @@ package com.himorfosis.kasirmegono;
 
 public class Koneksi {
 
-//    public static final String URL = "http://192.168.100.222/";
-    public static final String URL = "http://orproject.web.id/";
+//    public static final String URL = "http://156.67.221.226/";
+    public static final String URL = "http://10.0.2.2/";
 
-    public static final String login = URL + "kasir/api/login.php";
+    public static final String login = URL + "api_pos_rxking/api/auth";
 
-    public static final String kasir = URL + "kasir/api/kasir.php";
-    public static final String kasir_post = URL + "kasir/api/kasirpost.php";
-    public static final String kasir_update = URL + "kasir/api/kasirupdate.php";
-
-    public static final String mitra = URL + "kasir/api/mitra.php";
-    public static final String mitra_post = URL + "kasir/api/mitrapost.php";
-    public static final String mitra_update = URL + "kasir/api/mitraupdate.php";
-
-    public static final String produk_api = URL + "kasir/api/produk.php";
-    public static final String produk_tambah = URL + "kasir/api/produktambah.php";
-    public static final String produk_update = URL + "kasir/api/produkupdate.php";
-    public static final String produk_hapus = URL + "kasir/api/produkhapus.php";
-
-    public static final String pemesanan_api = URL + "kasir/api/pemesanan.php";
-    public static final String pemesanan_post = URL + "kasir/api/pemesananpost.php";
-
-    public static final String reward_cek = URL + "kasir/api/rewardcek.php";
-    public static final String reward_update = URL + "kasir/api/rewardpost.php";
-    public static final String reward = URL + "kasir/api/reward.php";
+    public static final String produk_api = URL + "api_pos_rxking/api/produk";
+    public static final String produk_tambah = URL + "api_pos_rxking/api/produk/add";
+    public static final String produk_update = URL + "api_pos_rxking/api/produk/update";
+    public static final String produk_delete = URL + "api_pos_rxking/api/produk/delete";
 
 
-    public static final String gambar = URL + "kasir/gambar/produk/";
+    public static final String pengguna_api = URL + "api_pos_rxking/api/pengguna";
+    public static final String pengguna_update = URL + "api_pos_rxking/api/pengguna/update";
+    public static final String pengguna_delete = URL + "api_pos_rxking/api/pengguna/delete";
+
+    public static final String pelanggan_api = URL + "api_pos_rxking/api/pelanggan";
+    public static final String pelanggan_update = URL + "api_pos_rxking/api/pelanggan/update";
+    public static final String pelanggan_delete = URL + "api_pos_rxking/api/pelanggan/delete";
+
+    public static final String kasir = URL + "api_pos_rxking/api/pengguna";
+    public static final String kasir_post = URL + "api_pos_rxking/api/kasirpost.php";
+    public static final String kasir_update = URL + "api_pos_rxking/api/kasirupdate.php";
+
+    public static final String pemesanan_post = URL + "api_pos_rxking/api/pemesanan/post";
+    public static final String pemesanan_api = URL + "api_pos_rxking/api/pemesanan";
+
+    public static final String gambar = URL + "api_pos_rxking/upload/";
 
 }
 

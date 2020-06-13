@@ -1,9 +1,9 @@
 package com.himorfosis.kasirmegono.Penjualan;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,14 +12,15 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.himorfosis.kasirmegono.Admin.Admin;
+import com.himorfosis.kasirmegono.Database;
 import com.himorfosis.kasirmegono.Kasir.Kasir;
 import com.himorfosis.kasirmegono.Koneksi;
-import com.himorfosis.kasirmegono.Mitra.Mitra;
 import com.himorfosis.kasirmegono.R;
 import com.himorfosis.kasirmegono.Sumber;
 import com.himorfosis.kasirmegono.Volley;
@@ -29,7 +30,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PenjualanDetail extends AppCompatActivity {
 
@@ -43,6 +46,8 @@ public class PenjualanDetail extends AppCompatActivity {
 
     LinearLayout detaill;
     ProgressBar progressBar;
+    Database db;
+    String getToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +60,8 @@ public class PenjualanDetail extends AppCompatActivity {
         TextView textToolbar = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.toolbartext);
         Button kembali = (Button) getSupportActionBar().getCustomView().findViewById(R.id.kembali);
         textToolbar.setText("Detail Penjualan");
+        db = new Database(getApplicationContext());
+        getToken = Sumber.getData("akun", "token", getApplicationContext());
 
         dibayar = findViewById(R.id.bayar);
         total = findViewById(R.id.total);
@@ -99,11 +106,6 @@ public class PenjualanDetail extends AppCompatActivity {
                     Intent in = new Intent(PenjualanDetail.this, Admin.class);
                     startActivity(in);
 
-                } else if (getuser.equals("Mitra")) {
-
-                    Intent in = new Intent(PenjualanDetail.this, Mitra.class);
-                    startActivity(in);
-
                 } else {
 
                     Intent in = new Intent(PenjualanDetail.this, Kasir.class);
@@ -141,7 +143,7 @@ public class PenjualanDetail extends AppCompatActivity {
                                 //creating a hero object and giving them the values from json object
                                 PenjualanClassData item = new PenjualanClassData();
 
-                                item.setId_pemesanan(jsonObject.getInt("id_pemesanan"));
+                                item.setId_pemesanan(jsonObject.getString("id_pemesanan"));
                                 item.setId_produk(jsonObject.getInt("id_produk"));
                                 item.setBayar(jsonObject.getInt("bayar"));
                                 item.setNama_produk(jsonObject.getString("nama_produk"));
@@ -196,7 +198,14 @@ public class PenjualanDetail extends AppCompatActivity {
 
 
                     }
-                });
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer "+ getToken);
+                return params;
+            }
+        };
 
         //adding the string request to request queue
         Volley.getInstance().addToRequestQueue(jsonObjectRequest);

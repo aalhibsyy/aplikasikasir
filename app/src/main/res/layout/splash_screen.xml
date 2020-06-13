@@ -13,7 +13,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="KASIR "
+        android:text="POS "
         android:textStyle="bold"
         android:textColor="@color/colorPrimary"
         android:textSize="25dp"/>
@@ -21,7 +21,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MEGONO"
+        android:text=" RX-KING"
         android:textStyle="bold"
         android:textColor="@color/hitam"
         android:textSize="25dp"/>

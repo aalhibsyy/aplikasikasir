@@ -1,10 +1,10 @@
 package com.himorfosis.kasirmegono.Pemesanan;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -122,40 +122,26 @@ public class PeriksaPemesanan extends Fragment {
 
             BeliClassData data = datapesanan.get(i);
 
+            String nama_produk = data.getNama_produk();
             int jumlah = data.getJumlah_produk();
             int harga = data.getHarga_produk();
-            int harga_gojek = data.getHarga_gojek();
-            int harga_grab = data.getHarga_grab();
 
+
+            Log.e("Nama_produk", "" +nama_produk );
             Log.e("jumlah", "" +jumlah );
             Log.e("harga", "" +harga );
-            Log.e("harga gojek", "" +harga_gojek );
-            Log.e("harga grab", "" +harga_grab );
 
             // hitung total bayar
 
-            if (getpembeli.equals("Umum")) {
+//            if (getpembeli.equals("Umum")) {
+//
+//
+//
+//            }
+            Log.e("Periksa Pemesanan", " umum");
 
-                Log.e("Periksa Pemesanan", " umum");
-
-                int biaya = harga * jumlah;
-                bayartotal = bayartotal + biaya;
-
-            } else if (getpembeli.equals("Gojek")) {
-
-                Log.e("Periksa Pemesanan", " gojek");
-
-                int biaya = harga_gojek * jumlah;
-                bayartotal = bayartotal + biaya;
-
-            } else if (getpembeli.equals("Grab")) {
-
-                Log.e("Periksa Pemesanan", " grab");
-
-                int biaya = harga_grab * jumlah;
-                bayartotal = bayartotal + biaya;
-
-            }
+            int biaya = harga * jumlah;
+            bayartotal = bayartotal + biaya;
 
             // hitung total item
 

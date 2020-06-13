@@ -20,6 +20,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.himorfosis.kasirmegono.Admin.Admin;
+import com.himorfosis.kasirmegono.Admin.PelangganTambah;
+import com.himorfosis.kasirmegono.Database;
 import com.himorfosis.kasirmegono.Koneksi;
 import com.himorfosis.kasirmegono.R;
 import com.himorfosis.kasirmegono.Sumber;
@@ -33,9 +35,10 @@ import java.util.Map;
 
 public class ProdukDetail extends AppCompatActivity {
 
-    TextView tvnama, tvharga, tvhargagojek, tvhargagrab, tvkategori;
-    String getid, getnama, getharga, getkategori, getgambar, gethargagojek, gethargagrab, user;
+    TextView tvkode,tvnama, tvharga, tvstok,tvkategori;
+    String getid,getkode, getnama, getharga,getstok, getkategori, getgambar,user, getToken;
     ImageView gambar;
+    Database db;
 
     ProgressDialog pDialog;
 
@@ -55,28 +58,51 @@ public class ProdukDetail extends AppCompatActivity {
         pDialog = new ProgressDialog(ProdukDetail.this);
         pDialog.setCancelable(false);
 
+        db = new Database(getApplicationContext());
+        getToken = Sumber.getData("akun", "token", getApplicationContext());
 
+        tvkode = findViewById(R.id.kode);
         tvnama = findViewById(R.id.nama);
         tvharga = findViewById(R.id.harga);
-        tvhargagojek = findViewById(R.id.hargagojek);
-        tvhargagrab = findViewById(R.id.hargagrab);
+        tvstok = findViewById(R.id.stok);
         tvkategori = findViewById(R.id.kategori);
         gambar = findViewById(R.id.gambar);
         Button hapus = findViewById(R.id.hapus);
+        Button update = findViewById(R.id.update);
 
         Intent bundle = getIntent();
 
         getid = bundle.getStringExtra("id");
+        getkode = bundle.getStringExtra("kode");
         getnama = bundle.getStringExtra("nama");
         getharga = bundle.getStringExtra("harga");
+        getstok =bundle.getStringExtra("stok");
         getkategori = bundle.getStringExtra("kategori");
         getgambar = bundle.getStringExtra("gambar");
-        gethargagojek = bundle.getStringExtra("harga_gojek");
-        gethargagrab = bundle.getStringExtra("harga_grab");
-
         user = Sumber.getData("akun", "user", ProdukDetail.this);
+        Log.e("produk id", getid);
+        Log.e("produk nama", getnama);
+        Log.e("produk harga", getharga);
+        Log.e("produk gambar", getgambar);
 
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                Intent in = new Intent(getApplicationContext(), ProdukTambah.class);
+
+                in.putExtra("data", "update");
+                in.putExtra("id", getid);
+                in.putExtra("kode", getkode);
+                in.putExtra("nama", getnama);
+                in.putExtra("harga", getharga);
+                in.putExtra("stok", getstok);
+                in.putExtra("kategori", getkategori);
+                in.putExtra("gambar", getgambar);
+
+                startActivity(in);
+            }
+        });
 
         hapus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,17 +116,13 @@ public class ProdukDetail extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
-
                                 hapusProduk();
-
                             }
                         });
 
                 alertDialogBuilder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
-
                     }
                 });
 
@@ -109,10 +131,10 @@ public class ProdukDetail extends AppCompatActivity {
             }
         });
 
+        tvkode.setText(getkode);
         tvnama.setText(getnama);
-        tvharga.setText("Rp " + getharga);
-        tvhargagrab.setText("Rp " + gethargagrab);
-        tvhargagojek.setText("Rp " + gethargagojek);
+        tvharga.setText(getharga);
+        tvstok.setText(getstok);
         tvkategori.setText(getkategori);
 
         Glide.with(getApplicationContext())
@@ -139,7 +161,7 @@ public class ProdukDetail extends AppCompatActivity {
         pDialog.setMessage("Hapus Produk ...");
         showDialog();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Koneksi.produk_hapus,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Koneksi.produk_delete,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -195,6 +217,12 @@ public class ProdukDetail extends AppCompatActivity {
 
                     }
                 }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer "+ getToken);
+                return params;
+            }
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();

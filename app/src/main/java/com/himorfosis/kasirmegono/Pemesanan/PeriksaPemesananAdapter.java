@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.himorfosis.kasirmegono.Database;
 import com.himorfosis.kasirmegono.Kasir.BeliClassData;
-import com.himorfosis.kasirmegono.Pemesanan.PeriksaPemesanan;
 import com.himorfosis.kasirmegono.R;
 import com.himorfosis.kasirmegono.Sumber;
 
@@ -119,7 +118,7 @@ public class PeriksaPemesananAdapter extends BaseAdapter {
 
                             holder.jumlah.setText(totalpesan);
 
-                            db.updateBeli(new BeliClassData(produk.getId_produk(), tambahpesanan, produk.getHarga_produk(), produk.getHarga_gojek(), produk.getHarga_grab(), produk.getHarga_produk(), produk.getNama_produk(), produk.getGambar()));
+                            db.updateBeli(new BeliClassData(produk.getId_produk(), tambahpesanan, produk.getHarga_produk(),produk.getHarga_produk(), produk.getNama_produk(), produk.getGambar()));
 
                             Log.e("tambah id", "" + produk.getId_produk());
 
@@ -162,7 +161,7 @@ public class PeriksaPemesananAdapter extends BaseAdapter {
 
                             } else {
 
-                                db.updateBeli(new BeliClassData(produk.getId_produk(), kurangpesanan, produk.getHarga_produk(), produk.getHarga_gojek(), produk.getHarga_grab(), produk.getHarga_produk(), produk.getNama_produk(), produk.getGambar()));
+                                db.updateBeli(new BeliClassData(produk.getId_produk(), kurangpesanan, produk.getHarga_produk(),  produk.getHarga_produk(), produk.getNama_produk(), produk.getGambar()));
 
                                 // reload new data
 
@@ -180,24 +179,10 @@ public class PeriksaPemesananAdapter extends BaseAdapter {
             if (produk != null) {
 
                 holder.jumlah.setText(String.valueOf(produk.getJumlah_produk()));
-                holder.namaproduk.setText(produk.getNama_produk());
+//                holder.namaproduk.setText(produk.getNama_produk());
+                holder.namaproduk.setText(String.valueOf(produk.getNama_produk()));
+                holder.hargaproduk.setText("Rp " + String.valueOf(produk.getHarga_produk() + " per produk"));
 
-                if (getpembeli.equals("Umum")) {
-
-                    Log.e("Periksa adapter", " umum");
-                    holder.hargaproduk.setText("Rp " + String.valueOf(produk.getHarga_produk() + " per produk"));
-
-                } else if (getpembeli.equals("Gojek")) {
-
-                    Log.e("Periksa adapter", " gojek");
-                    holder.hargaproduk.setText("Rp " + String.valueOf(produk.getHarga_gojek() + " per produk"));
-
-                } else if (getpembeli.equals("Grab")) {
-
-                    Log.e("Periksa adapter", " grab");
-                    holder.hargaproduk.setText("Rp " + String.valueOf(produk.getHarga_grab() + " per produk"));
-
-                }
 
             }
 
