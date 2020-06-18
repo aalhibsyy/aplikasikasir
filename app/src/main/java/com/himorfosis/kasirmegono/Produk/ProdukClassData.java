@@ -5,8 +5,6 @@ import android.content.Intent;
 public class ProdukClassData {
 
 
-
-    private String kode_produk;
     private String nama_produk;
     private Integer id_kategori_produk;
 
@@ -23,14 +21,6 @@ public class ProdukClassData {
     private Integer harga;
     private String kategori;
     private Integer id_produk;
-
-    public String getKode_produk() {
-        return kode_produk;
-    }
-
-    public void setKode_produk(String kode_produk) {
-        this.kode_produk = kode_produk;
-    }
 
     public Integer getId_produk() {
         return id_produk;

@@ -54,7 +54,6 @@ public class Produk extends Fragment {
     String getToken;
 
     String id_produk;
-    String setKode_produk;
     String user;
 
 
@@ -104,7 +103,7 @@ public class Produk extends Fragment {
 
     private void produk() {
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Koneksi.produk_tambah, null,
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, Koneksi.produk_tambah, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -135,7 +134,6 @@ public class Produk extends Fragment {
                                 ProdukClassData item = new ProdukClassData();
 
                                 item.setId_produk(jsonObject.getInt("id_produk"));
-                                item.setKode_produk(jsonObject.getString("kode_produk"));
                                 item.setKategori(jsonObject.getString("kategori"));
                                 item.setNama_produk(jsonObject.getString("nama_produk"));
                                 item.setGambar(jsonObject.getString("gambar_produk"));
@@ -171,7 +169,6 @@ public class Produk extends Fragment {
                                     Intent intent = new Intent(getContext(), ProdukDetail.class);
 
                                     intent.putExtra("id", String.valueOf(data.getId_produk()));
-                                    intent.putExtra("kode", String.valueOf(data.getKode_produk()));
                                     intent.putExtra("nama", data.getNama_produk());
                                     intent.putExtra("harga", String.valueOf(data.getHarga()));
                                     intent.putExtra("stok", String.valueOf(data.getStok()));

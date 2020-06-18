@@ -189,4 +189,9 @@ public class Pelanggan extends Fragment {
         Volley.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //getData();
+    }
 }

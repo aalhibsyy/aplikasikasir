@@ -135,8 +135,7 @@ public class PenggunaDetail extends AppCompatActivity {
                     if (error.equals("false")) {
 //                        Toast.makeText(PenggunaDetail.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
-                        Intent in = new Intent(PenggunaDetail.this, Admin.class);
-                        startActivity(in);
+                        finish();
                     } else {
 //                        Toast.makeText(PenggunaDetail.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
                     }

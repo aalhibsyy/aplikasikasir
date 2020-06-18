@@ -56,6 +56,7 @@ public class ProdukTambah extends AppCompatActivity {
     TextView kategori;
     Bitmap bitmap, decoded;
     int success;
+    int imgFlag = 0;
     int PICK_IMAGE_REQUEST = 1;
     int bitmap_size = 60; // range 1 - 100
     LinearLayout pilihgambar;
@@ -76,6 +77,7 @@ public class ProdukTambah extends AppCompatActivity {
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.toolbarclose);
         TextView textToolbar = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.toolbartext);
+        Button btnBack = (Button) getSupportActionBar().getCustomView().findViewById(R.id.kembali);
         db = new Database(getApplicationContext());
         getToken = Sumber.getData("akun", "token", getApplicationContext());
 
@@ -92,10 +94,18 @@ public class ProdukTambah extends AppCompatActivity {
 
         imageView = (ImageView) findViewById(R.id.gambar);
 
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         buttonChoose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showFileChooser();
+                imgFlag = 1;
             }
         });
 
@@ -111,11 +121,9 @@ public class ProdukTambah extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (getdata.equals("update")) {
-
                     produkUpdate();
 
                 } else {
-
                     uploadImage();
                 }
             }
@@ -252,7 +260,6 @@ public class ProdukTambah extends AppCompatActivity {
 
                 //menambah parameter yang di kirim ke web servis
                 params.put("image", getStringImage(decoded));
-                params.put("kode_produk", kode.getText().toString().trim());
                 params.put("nama_produk", nama.getText().toString().trim());
                 params.put("harga", harga.getText().toString().trim());
                 params.put("stok", stok.getText().toString().trim());
@@ -327,8 +334,12 @@ public class ProdukTambah extends AppCompatActivity {
                 Map<String, String> params = new HashMap<String, String>();
 
                 //menambah parameter yang di kirim ke web servis
-                params.put("image", getStringImage(decoded));
-                params.put("kode_produk", kode.getText().toString().trim());
+                if(imgFlag == 0) {
+                    params.put("image", "no_image");
+                }
+                else {
+                    params.put("image", getStringImage(decoded));
+                }
                 params.put("nama_produk", nama.getText().toString().trim());
                 params.put("harga", harga.getText().toString().trim());
                 params.put("stok", stok.getText().toString().trim());

@@ -117,17 +117,11 @@ public class PelangganDetail extends AppCompatActivity {
                     JSONObject obj = new JSONObject(response);
 
                     Log.e("obj", "" + obj);
-                    String error = obj.getString("error");
-                    Log.e("error", " " + error);
                     Log.e("response", " " + response);
-                    if (error.equals("false")) {
-//                        Toast.makeText(PelangganDetail.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PelangganDetail.this, obj.getString("status"), Toast.LENGTH_SHORT).show();
 
-                        Intent in = new Intent(PelangganDetail.this, Admin.class);
-                        startActivity(in);
-                    } else {
-//                        Toast.makeText(PelangganDetail.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
-                    }
+                    Intent in = new Intent(PelangganDetail.this, Admin.class);
+                    startActivity(in);
 
                 } catch (JSONException e) {
                     Log.e("response", " " + response);

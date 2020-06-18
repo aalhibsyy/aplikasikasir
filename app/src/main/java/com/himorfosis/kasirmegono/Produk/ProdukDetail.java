@@ -61,7 +61,6 @@ public class ProdukDetail extends AppCompatActivity {
         db = new Database(getApplicationContext());
         getToken = Sumber.getData("akun", "token", getApplicationContext());
 
-        tvkode = findViewById(R.id.kode);
         tvnama = findViewById(R.id.nama);
         tvharga = findViewById(R.id.harga);
         tvstok = findViewById(R.id.stok);
@@ -73,7 +72,6 @@ public class ProdukDetail extends AppCompatActivity {
         Intent bundle = getIntent();
 
         getid = bundle.getStringExtra("id");
-        getkode = bundle.getStringExtra("kode");
         getnama = bundle.getStringExtra("nama");
         getharga = bundle.getStringExtra("harga");
         getstok =bundle.getStringExtra("stok");
@@ -93,7 +91,6 @@ public class ProdukDetail extends AppCompatActivity {
 
                 in.putExtra("data", "update");
                 in.putExtra("id", getid);
-                in.putExtra("kode", getkode);
                 in.putExtra("nama", getnama);
                 in.putExtra("harga", getharga);
                 in.putExtra("stok", getstok);
@@ -131,7 +128,6 @@ public class ProdukDetail extends AppCompatActivity {
             }
         });
 
-        tvkode.setText(getkode);
         tvnama.setText(getnama);
         tvharga.setText(getharga);
         tvstok.setText(getstok);

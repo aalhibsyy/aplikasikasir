@@ -147,8 +147,7 @@ public class PenggunaTambah extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent in = new Intent(PenggunaTambah.this, Admin.class);
-                startActivity(in);
+                finish();
 
             }
         });
@@ -219,8 +218,7 @@ public class PenggunaTambah extends AppCompatActivity {
 
                         Toast.makeText(PenggunaTambah.this, obj.getString("status"), Toast.LENGTH_SHORT).show();
 
-                        Intent in = new Intent(PenggunaTambah.this, Admin.class);
-                        startActivity(in);
+                        finish();
 
                     } else {
                         Log.e("response", " " + response);
@@ -232,8 +230,7 @@ public class PenggunaTambah extends AppCompatActivity {
                         Toast.makeText(PenggunaTambah.this, obj.getString("status"), Toast.LENGTH_SHORT).show();
 
 
-                        Intent in = new Intent(PenggunaTambah.this, Admin.class);
-                        startActivity(in);
+                        finish();
 
 
                     }
@@ -244,8 +241,7 @@ public class PenggunaTambah extends AppCompatActivity {
 
                     hideDialog();
 
-                    Intent in = new Intent(PenggunaTambah.this, Admin.class);
-                    startActivity(in);
+                    finish();
 
                 }
             }

@@ -3,7 +3,7 @@ package com.himorfosis.kasirmegono;
 public class Koneksi {
 
 //    public static final String URL = "http://156.67.221.226/";
-    public static final String URL = "http://10.0.2.2/";
+    public static final String URL = "http://192.168.80.183/";
 
     public static final String login = URL + "api_pos_rxking/api/auth";
 

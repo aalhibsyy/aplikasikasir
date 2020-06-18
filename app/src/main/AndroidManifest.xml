@@ -25,7 +25,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:name=".Volley"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="Kasir"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
